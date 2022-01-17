@@ -5,7 +5,7 @@
 
     async function getWeather() {
         const key = "1ac68e62a6ed46e28da135216221501";
-        const res = await fetch(`http://api.weatherapi.com/v1/current.json?key=${key}&q=${loc}`);
+        const res = await fetch(`https://api.weatherapi.com/v1/current.json?key=${key}&q=${loc}`);
        
         if (res.ok) {
             const result = await res.json();
