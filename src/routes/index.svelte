@@ -1,12 +1,13 @@
 <script>
-    let loc = "Stuttgart";
+import { action_destroyer } from "svelte/internal";
+
+    let loc = "Berlin";
 
     let promise = getWeather();
 
     async function getWeather() {
         const key = "bba81dedf0f34bda955161436221701";
-        const res = await fetch(`https://api.weatherapi.com/v1/current.json?key=${key}&q=${loc}`);
-       
+        const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}`);
         if (res.ok) {
             const result = await res.json();
             console.log(result);
@@ -26,7 +27,7 @@
 
     <form>
         <input type="text" bind:value={loc} placeholder="Enter Location">
-        <button type="submit" on:click|preventDefault={handleClick}>Laden</button>
+        <button type="submit" on:click|preventDefault={handleClick}>Load</button>
     </form>
 
     {#await promise}
@@ -46,6 +47,18 @@
                 <img src="/humidity.svg" alt="humidity">
                 <p>{data.current.humidity}%</p>
             </div>
+
+            <div class="card sun">
+                <div class="sunrise">
+                    <img src="/sunrise.svg" alt="sunrise">
+                    <p>{data.forecast.forecastday[0].astro.sunrise}</p>
+                </div>
+                <div class="sunset">
+                    <img src="/sunrise.svg" alt="sunrise">
+                    <p>{data.forecast.forecastday[0].astro.sunset}</p>
+                </div>
+                
+            </div>
         </div>
     {:catch error}
         <p style="color: red">Error: Ort nicht vorhanden.</p>
@@ -53,21 +66,61 @@
 </body>
 
 <style>
+    h1 {
+        margin-top: .8rem;
+        margin-bottom: .7rem;
+    }
+
+    input {
+        border: none;
+        border-radius: 1rem;
+        font-size: 1rem;
+        padding: .3rem .5rem;
+    }
+
+    button {
+        border: none;
+        font-size: 1rem;
+        padding: .3rem .5rem;
+        border-radius: 1rem;
+    }
+
+    .cards {
+        margin: 0 1rem;
+        margin-top: 1rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
     .card {
         background-color: rgba(228, 228, 228, .78);
-        margin: 1rem;
-        height: 200px;
         border-radius: 1rem;
         color: black;
-        font-size: 2.5rem;
+        font-size: 1.8rem;
     }
 
     .card img {
-        width: 5rem;
-        margin-top: 1rem;
+        width: 4rem;
+        margin: 0;
+        margin-top: .5rem;
     }
 
-    .card p {
-        margin: 1rem;
+    p {
+        margin: 0;
+    }
+
+    .sun {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 1rem;
+    }
+
+    /* Responsive Design */
+
+    @media only screen and (max-width: 400px) {
+        .cards {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
