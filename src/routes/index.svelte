@@ -23,7 +23,7 @@ import { action_destroyer } from "svelte/internal";
 </script>
 
 <body>
-    <h1>Hallo.</h1>
+    <h1>Hello.</h1>
 
     <form>
         <input type="text" bind:value={loc} placeholder="Enter Location">
@@ -69,6 +69,8 @@ import { action_destroyer } from "svelte/internal";
     h1 {
         margin-top: .8rem;
         margin-bottom: .7rem;
+        color: black;
+        letter-spacing: .2rem;
     }
 
     input {
@@ -98,6 +100,7 @@ import { action_destroyer } from "svelte/internal";
         border-radius: 1rem;
         color: black;
         font-size: 1.8rem;
+        box-shadow: 0 0 .5rem black;
     }
 
     .card img {
