@@ -1,15 +1,26 @@
 <script>
-import { action_destroyer } from "svelte/internal";
-
     let loc = "Berlin";
+    let suggestions = [];
+
+    async function getSuggestions() {
+        const key = "bba81dedf0f34bda955161436221701";
+        const res = await fetch(`https://api.weatherapi.com/v1/search.json?key=${key}&q=${loc}`);
+        if (res.ok) {
+            const result = await res.json();
+            console.log(result);
+  		    suggestions = result;
+		} else {
+			throw new Error(await res.json());
+		}
+    }
 
     let promise = getWeather();
-
     async function getWeather() {
         const key = "bba81dedf0f34bda955161436221701";
         const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}`);
         if (res.ok) {
             const result = await res.json();
+            loc = result.location.name;
             console.log(result);
   		    return result;
 		} else {
@@ -23,12 +34,18 @@ import { action_destroyer } from "svelte/internal";
 </script>
 
 <body>
-    <h1>Hello.</h1>
+    <h1>Hello</h1>
 
     <form>
-        <input type="text" bind:value={loc} placeholder="Enter Location">
+        <input type="text" bind:value={loc} on:input={getSuggestions} placeholder="Enter Location">
         <button type="submit" on:click|preventDefault={handleClick}>Load</button>
     </form>
+
+    <div class="suggestions">
+        {#each suggestions as suggestion}
+            <p on:click|preventDefault={() => {loc = suggestion.name; handleClick(); suggestions = []}}>{suggestion.name}</p>
+        {/each}
+    </div>
 
     {#await promise}
         <p>Lade Wetter ...</p>
@@ -61,15 +78,14 @@ import { action_destroyer } from "svelte/internal";
             </div>
         </div>
     {:catch error}
-        <p style="color: red">Error: Ort nicht vorhanden.</p>
+        <p class="error">Error: Ort nicht vorhanden.</p>
     {/await}
 </body>
 
 <style>
     h1 {
         margin-top: .8rem;
-        margin-bottom: .7rem;
-        color: black;
+        margin-bottom: .7rem; 
         letter-spacing: .2rem;
     }
 
@@ -87,6 +103,15 @@ import { action_destroyer } from "svelte/internal";
         border-radius: 1rem;
     }
 
+    .suggestions {
+        margin-top: .5rem;
+    }
+
+    .suggestions p {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
     .cards {
         margin: 0 1rem;
         margin-top: 1rem;
@@ -98,7 +123,6 @@ import { action_destroyer } from "svelte/internal";
     .card {
         background-color: rgba(228, 228, 228, .78);
         border-radius: 1rem;
-        color: black;
         font-size: 1.8rem;
         box-shadow: 0 0 .5rem black;
     }
@@ -117,6 +141,11 @@ import { action_destroyer } from "svelte/internal";
         display: flex;
         justify-content: space-between;
         padding: 0 1rem;
+    }
+
+    .error {
+        color: red;
+        margin-top: .5rem;
     }
 
     /* Responsive Design */
