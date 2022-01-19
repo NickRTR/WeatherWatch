@@ -1,13 +1,19 @@
 <script>
+    import {conditions} from "$lib/conditions.js";
+    import {selectTextOnFocus} from "$lib/inputDirectives.js";
+
     let loc = "Berlin";
     let suggestions = [];
+    let symbol = "";
 
     async function getSuggestions() {
+        if (loc.match(/^ *$/) !== null) {
+            return;
+        }
         const key = "bba81dedf0f34bda955161436221701";
         const res = await fetch(`https://api.weatherapi.com/v1/search.json?key=${key}&q=${loc}`);
         if (res.ok) {
             const result = await res.json();
-            console.log(result);
   		    suggestions = result;
 		} else {
 			throw new Error(await res.json());
@@ -16,16 +22,27 @@
 
     let promise = getWeather();
     async function getWeather() {
+        suggestions = [];
+        symbol = "";
         const key = "bba81dedf0f34bda955161436221701";
         const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}`);
         if (res.ok) {
             const result = await res.json();
             loc = result.location.name;
             console.log(result);
+            getSymbol(result.current.condition.code);
   		    return result;
 		} else {
 			throw new Error(await res.json());
 		}
+    }
+
+    const getSymbol = (code) => {
+        for (const condition in conditions) {
+            if (conditions[condition].includes(code)) {
+                symbol = condition;
+            }
+        }
     }
 
     const handleClick = () => {
@@ -37,13 +54,13 @@
     <h1>Hello</h1>
 
     <form>
-        <input type="text" bind:value={loc} on:input={getSuggestions} placeholder="Enter Location">
+        <input type="text" placeholder="Enter Location" bind:value={loc} on:input={getSuggestions} use:selectTextOnFocus>
         <button type="submit" on:click|preventDefault={handleClick}>Load</button>
     </form>
 
     <div class="suggestions">
         {#each suggestions as suggestion}
-            <p on:click|preventDefault={() => {loc = suggestion.name; handleClick(); suggestions = []}}>{suggestion.name}</p>
+            <p on:click|preventDefault={() => {loc = suggestion.name; handleClick()}}>{suggestion.name}</p>
         {/each}
     </div>
 
@@ -52,8 +69,8 @@
     {:then data} 
         <div class="cards">
             <div class="card temp">
-                <img src="/sun.svg" alt="sun">
-                <p>{Math.floor(data.current.temp_c)}°C</p>
+                <img src="/condition/{symbol}.svg" alt={symbol}>
+                <p>{data.current.condition.text}, {Math.floor(data.current.temp_c)}°C</p>
             </div>
             <div class="card wind">
                 <img src="/wind.svg" alt="wind">
@@ -128,7 +145,7 @@
     }
 
     .card img {
-        width: 4rem;
+        width: 3.5rem;
         margin: 0;
         margin-top: .5rem;
     }
