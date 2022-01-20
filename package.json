@@ -2,16 +2,16 @@
     "name": "weatherwatch",
     "version": "0.0.1",
     "scripts": {
-      "dev": "svelte-kit dev",
-      "build": "svelte-kit build",
-      "package": "svelte-kit package",
-      "preview": "svelte-kit preview"
+        "dev": "svelte-kit dev",
+        "build": "svelte-kit build",
+        "package": "svelte-kit package",
+        "preview": "svelte-kit preview"
     },
     "devDependencies": {
-      "@sveltejs/adapter-auto": "next",
-      "@sveltejs/kit": "next",
-      "svelte": "^3.44.0"
+        "@sveltejs/adapter-auto": "next",
+        "@sveltejs/kit": "next",
+        "svelte": "^3.44.0",
+        "svelte-geolocation": "^0.3.0"
     },
     "type": "module"
-  }
-  
+}

@@ -1,10 +1,17 @@
 <script>
     import {conditions} from "$lib/conditions.js";
-    import {selectTextOnFocus} from "$lib/inputDirectives.js";
+    import {selectTextOnFocus} from "$lib/components/inputDirectives.js";
+    import Switch from '$lib/components/Switch.svelte'
+    import Geolocation from "svelte-geolocation";
+
+    let coords = [];
+
+    $: console.log(coords);
 
     let loc = "Stuttgart";
     let suggestions = [];
     let symbol = "";
+    let unit = "Metric";
 
     async function getSuggestions() {
         if (loc.match(/^ *$/) !== null) {
@@ -51,6 +58,8 @@
 </script>
 
 <body>
+    <Geolocation getPosition bind:coords />
+
     <h1>Hello</h1>
 
     <form>
@@ -70,17 +79,32 @@
         <div class="cards">
             <div class="card temp">
                 <img src="/condition/{symbol}.svg" alt={symbol}>
-                <p>{data.current.condition.text}, {Math.round(data.current.temp_c)}°C</p>
+                {#if unit === "Metric"}
+                    <p>{data.current.condition.text}, {Math.round(data.current.temp_c)}°C</p>
+                {:else}
+                    <p>{data.current.condition.text}, {Math.round(data.current.temp_f)}F</p>
+                {/if}
             </div>
             <div class="card wind">
-                <div class="left">
-                    <img src="/wind.svg" alt="wind">
-                    <p>{data.current.wind_kph}km/h</p>
-                </div>
-                <div class="right">
-                    <img src="/feelslike.svg" alt="">
-                    <p>Feels {Math.round(data.current.feelslike_c)}°C</p>
-                </div>
+                {#if unit === "Metric"}
+                    <div class="left">
+                        <img src="/wind.svg" alt="wind">
+                        <p>{data.current.wind_kph}km/h</p>
+                    </div>
+                    <div class="right">
+                        <img src="/feelslike.svg" alt="">
+                        <p>{Math.round(data.current.feelslike_c)}°C</p>
+                    </div>
+                {:else}
+                    <div class="left">
+                        <img src="/wind.svg" alt="wind">
+                        <p>{data.current.wind_kph}mph</p>
+                    </div>
+                    <div class="right">
+                        <img src="/feelslike.svg" alt="">
+                        <p>{Math.round(data.current.feelslike_f)}F</p>
+                    </div>
+                {/if}
             </div>
 
             <div class="card humidity">
@@ -103,6 +127,10 @@
     {:catch error}
         <p class="error">Error: Ort nicht vorhanden.</p>
     {/await}
+
+    <div class="unit">
+        <Switch bind:value={unit} label="" design="multi" options={['Imperial', 'Metric']} fontSize={18}/>
+    </div>
 </body>
 
 <style>
@@ -144,10 +172,9 @@
     }
 
     .card {
-        /* background-color: rgba(255, 255, 255, 0.78); */
         background-color: white;
         border-radius: 1rem;
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         box-shadow: 0 0 .5rem black;
     }
 
@@ -171,13 +198,16 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 1rem;
-        font-size: 1.7rem;
+        padding: 0 2rem;
     }
 
     .error {
         color: red;
         margin-top: .5rem;
+    }
+
+    .unit {
+        margin-top: 1rem;
     }
 
     /* Responsive Design */
