@@ -2,16 +2,24 @@
     import {conditions} from "$lib/conditions.js";
     import {selectTextOnFocus} from "$lib/components/inputDirectives.js";
     import Switch from '$lib/components/Switch.svelte'
-    import Geolocation from "svelte-geolocation";
+    import { browser } from "$app/env";
 
-    let coords = [];
-
-    $: console.log(coords);
-
-    let loc = "Stuttgart";
+    let loc = browser ? localStorage.getItem("location") : "Stuttgart";
     let suggestions = [];
     let symbol = "";
-    let unit = "Metric";
+    let unit = browser ? localStorage.getItem("unit") : "Metric";
+
+    $: {
+        if (browser) {
+            localStorage.setItem("unit", unit);
+        }
+    }
+
+    $: {
+        if (browser) {
+            localStorage.setItem("location", loc);
+        }
+    }
 
     async function getSuggestions() {
         if (loc.match(/^ *$/) !== null) {
@@ -58,9 +66,11 @@
 </script>
 
 <body>
-    <Geolocation getPosition bind:coords />
-
     <h1>Hello</h1>
+
+    <div class="unit">
+        <Switch bind:value={unit} label="" design="multi" options={['Metric', 'Imperial']} fontSize={18}/>
+    </div>
 
     <form>
         <input type="text" placeholder="Enter Location" bind:value={loc} on:input={getSuggestions} use:selectTextOnFocus>
@@ -98,7 +108,7 @@
                 {:else}
                     <div class="left">
                         <img src="/wind.svg" alt="wind">
-                        <p>{data.current.wind_kph}mph</p>
+                        <p>{data.current.wind_mph}mph</p>
                     </div>
                     <div class="right">
                         <img src="/feelslike.svg" alt="">
@@ -127,10 +137,6 @@
     {:catch error}
         <p class="error">Error: Ort nicht vorhanden.</p>
     {/await}
-
-    <div class="unit">
-        <Switch bind:value={unit} label="" design="multi" options={['Imperial', 'Metric']} fontSize={18}/>
-    </div>
 </body>
 
 <style>
@@ -138,6 +144,10 @@
         margin-top: .8rem;
         margin-bottom: .7rem; 
         letter-spacing: .2rem;
+    }
+
+    .unit {
+        margin-bottom: .8rem;
     }
 
     input {
@@ -204,10 +214,6 @@
     .error {
         color: red;
         margin-top: .5rem;
-    }
-
-    .unit {
-        margin-top: 1rem;
     }
 
     /* Responsive Design */
