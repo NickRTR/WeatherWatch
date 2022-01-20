@@ -2,7 +2,7 @@
     import {conditions} from "$lib/conditions.js";
     import {selectTextOnFocus} from "$lib/inputDirectives.js";
 
-    let loc = "Berlin";
+    let loc = "Stuttgart";
     let suggestions = [];
     let symbol = "";
 
@@ -70,16 +70,22 @@
         <div class="cards">
             <div class="card temp">
                 <img src="/condition/{symbol}.svg" alt={symbol}>
-                <p>{data.current.condition.text}, {Math.floor(data.current.temp_c)}°C</p>
+                <p>{data.current.condition.text}, {Math.round(data.current.temp_c)}°C</p>
             </div>
             <div class="card wind">
-                <img src="/wind.svg" alt="wind">
-                <p>{data.current.wind_kph}km/h</p>
+                <div class="left">
+                    <img src="/wind.svg" alt="wind">
+                    <p>{data.current.wind_kph}km/h</p>
+                </div>
+                <div class="right">
+                    <img src="/feelslike.svg" alt="">
+                    <p>Feels {Math.round(data.current.feelslike_c)}°C</p>
+                </div>
             </div>
 
             <div class="card humidity">
                 <img src="/humidity.svg" alt="humidity">
-                <p>{data.current.humidity}%</p>
+                <p>Humidity: {data.current.humidity}%</p>
             </div>
 
             <div class="card sun">
@@ -138,7 +144,8 @@
     }
 
     .card {
-        background-color: rgba(228, 228, 228, .78);
+        /* background-color: rgba(255, 255, 255, 0.78); */
+        background-color: white;
         border-radius: 1rem;
         font-size: 1.8rem;
         box-shadow: 0 0 .5rem black;
@@ -158,6 +165,14 @@
         display: flex;
         justify-content: space-between;
         padding: 0 1rem;
+    }
+
+    .wind {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1rem;
+        font-size: 1.7rem;
     }
 
     .error {
