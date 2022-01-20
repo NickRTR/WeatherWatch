@@ -4,21 +4,20 @@
     import Switch from '$lib/components/Switch.svelte'
     import { browser } from "$app/env";
 
-    let loc = browser ? localStorage.getItem("location") : "Stuttgart";
-    let suggestions = [];
-    let symbol = "";
-    let unit = browser ? localStorage.getItem("unit") : "Metric";
-
-    $: {
-        if (browser) {
-            localStorage.setItem("unit", unit);
+    let loc = browser ? localStorage.getItem("location") : "New York";
+    $: if (browser) {
+        if (loc === "Nulles") {
+            loc = "New York";
         }
+        localStorage.setItem("location", loc);
     }
 
-    $: {
-        if (browser) {
-            localStorage.setItem("location", loc);
-        }
+    let suggestions = [];
+    let symbol = "";
+
+    let unit = browser ? localStorage.getItem("unit") : "Metric";
+    $: if (browser) {
+            localStorage.setItem("unit", unit);
     }
 
     async function getSuggestions() {
