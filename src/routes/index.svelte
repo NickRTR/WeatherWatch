@@ -10,14 +10,11 @@
     // variables
     const key = "bba81dedf0f34bda955161436221701";
     let symbol = "";
+    let displayLocation = ""; // whole location data for region print
 
     // get/save location from/to localStorage
-    let loc = browser ? localStorage.getItem("location") : "New York";
-    let displayLocation = "";
+    let loc = browser ? localStorage.getItem("location") : "New York"; // just name of location for input text and saving
     $: if (browser) {
-        if (loc === "Nulles") {
-            loc = "New York";
-        }
         localStorage.setItem("location", loc);
     }
 
@@ -50,6 +47,7 @@
     let promise = getWeather();
     async function getWeather() {
         suggestions = []; 
+        loc = (loc === null) ? "New York" : loc;
         const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}`);
         if (res.ok) {
             const result = await res.json();
