@@ -4,7 +4,13 @@
     import Switch from '$lib/components/Switch.svelte'
     import {browser} from "$app/env";
 
-    let loc = "New York";
+    let loc = browser ? localStorage.getItem("location") : "New York";
+    $: if (browser) {
+        if (loc === "Nulles") {
+            loc = "New York";
+        }
+        localStorage.setItem("location", loc);
+    }
 
     let unit = browser ? localStorage.getItem("unit") : "Metric";
     $: if (browser) {
@@ -31,15 +37,12 @@
 
     let promise = getWeather();
     async function getWeather() {
-        suggestions = [];
-        symbol = "";
-
+        suggestions = []; 
         const key = "bba81dedf0f34bda955161436221701";
         const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}`);
         if (res.ok) {
             const result = await res.json();
             loc = result.location.name;
-            console.log(result);
             getSymbol(result.current.condition.code);
   		    return result;
 		} else {
