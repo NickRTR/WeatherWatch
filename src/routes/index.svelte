@@ -1,9 +1,17 @@
 <script>
+    // packages
     import {conditions} from "$lib/conditions.js";
     import {selectTextOnFocus} from "$lib/components/inputDirectives.js";
-    import Switch from '$lib/components/Switch.svelte'
+    import Switch from '$lib/components/Switch.svelte';
+
+    // tools
     import {browser} from "$app/env";
 
+    // variables
+    const key = "bba81dedf0f34bda955161436221701";
+    let symbol = "";
+
+    // get/save location from/to localStorage
     let loc = browser ? localStorage.getItem("location") : "New York";
     let displayLocation = "";
     $: if (browser) {
@@ -13,6 +21,7 @@
         localStorage.setItem("location", loc);
     }
 
+    // get/set preffered unit from/to localStorage
     let unit = browser ? localStorage.getItem("unit") : "Metric";
     $: if (browser) {
         if (unit === null) {
@@ -21,51 +30,45 @@
         localStorage.setItem("unit", unit);
     }
 
+    // on Input: fetch suggestions from API
     let suggestions = [];
     async function getSuggestions() {
-        if (loc.match(/^ *$/) !== null) {
+        if (loc.match(/^ *$/) !== null) {   // If Input is empty or just spaces, don't show suggestions
             return;
         }
-        const key = "bba81dedf0f34bda955161436221701";
         const res = await fetch(`https://api.weatherapi.com/v1/search.json?key=${key}&q=${loc}`);
         if (res.ok) {
             const result = await res.json();
   		    suggestions = result;
             suggestions.length = (suggestions.length === 10) ? 5 : 0; 
-            console.log(suggestions);
 		} else {
 			throw new Error(await res.json());
 		}
     }
 
+    // fetch weather data
     let promise = getWeather();
     async function getWeather() {
         suggestions = []; 
-        const key = "bba81dedf0f34bda955161436221701";
         const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}`);
         if (res.ok) {
             const result = await res.json();
             loc = result.location.name;
             displayLocation = result.location;
-            console.table(displayLocation);
-            getSymbol(result.current.condition.code);
+            getSymbol(result.current.condition.code); // get weather symbol
   		    return result;
 		} else {
 			throw new Error(await res.json());
 		}
     }
 
-    let symbol = "";
+    // go through all possible conditions and get the fitting according to the weather code
     const getSymbol = (code) => {
         for (const condition in conditions) {
             if (conditions[condition].includes(code)) {
                 symbol = condition;
             }
         }
-    }
-
-    const handleClick = () => {
-        promise = getWeather();
     }
 </script>
 
@@ -78,12 +81,12 @@
 
     <form>
         <input type="text" placeholder="Enter Location" bind:value={loc} on:input={getSuggestions} use:selectTextOnFocus>
-        <button type="submit" on:click|preventDefault={handleClick}>Load</button>
+        <button type="submit" on:click|preventDefault={() => {promise = getWeather()}}>Load</button>
     </form>
 
     <div class="suggestions">
         {#each suggestions as suggestion}
-            <p on:click|preventDefault={() => {loc = suggestion.name; handleClick()}}>{suggestion.name}</p>
+            <p on:click|preventDefault={() => {loc = suggestion.name; promise = getWeather()}}>{suggestion.name}</p>
         {/each}
     </div>
 
@@ -228,7 +231,7 @@
     }
 
     /* Responsive Design */
-
+    
     @media only screen and (max-width: 450px) {
         .cards {
             grid-template-columns: 1fr;

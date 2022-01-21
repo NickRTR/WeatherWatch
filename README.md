@@ -1,38 +1,33 @@
-# create-svelte
+# Weather Watch
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte);
+> I would like to contribute with someone on this Project. If you want to have some fun building a beautiful weather app you're welcome to write me at nickrtrrtr@gmail.com! 
 
-## Creating a project
+<img src="./static/condition/sun.svg" width=100>
+<img src="./static/condition/partly cloudy.svg" width=100>
+<img src="./static/condition/cloudy.svg" width=100>
+<img src="./static/condition/rain possible.svg" width=100>
+<img src="./static/condition/rain.svg" width=100>
+<img src="./static/condition/snow.svg" width=100>
+<img src="./static/condition/thunder.svg" width=100>
 
-If you're seeing this, you've probably already done this step. Congrats!
+Weather Watch is a very basic weather report built in Sveltekit.. Currently it only shows the current weather. The data is delivered by the free API from https://www.weatherapi.com/.
 
-```bash
-# create a new project in the current directory
-npm init svelte@next
+## Functionality
 
-# create a new project in my-app
-npm init svelte@next my-app
-```
+- Switch between Metric and Imperial units
+- Description and Symbol for 7 different weather conditions
+- Temperature
+- Wind speed
+- Felt temperature
+- Air Humidity
+- Sunrise and Sunset times
 
-> Note: the `@next` is temporary
+## Next Steps
 
-## Developing
+- Weather forecast
+- Fundamental Ui improvements
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+---
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-Before creating a production version of your app, install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment. Then:
-
-```bash
-npm run build
-```
-
-> You can preview the built app with `npm run preview`, regardless of whether you installed an adapter. This should _not_ be used to serve your app in production.
+https://twitter.com/nickrtrrtr \
+https://kit.svelte.dev
