@@ -10,13 +10,8 @@
     // variables
     const key = "bba81dedf0f34bda955161436221701";
     let symbol = "";
+    let loc = browser ? localStorage.getItem("location") : "New York"; // get/save location name from/to localStorage
     let displayLocation = ""; // whole location data for region print
-
-    // get/save location from/to localStorage
-    let loc = browser ? localStorage.getItem("location") : "New York"; // just name of location for input text and saving
-    $: if (browser) {
-        localStorage.setItem("location", loc);
-    }
 
     // get/set preffered unit from/to localStorage
     let unit = browser ? localStorage.getItem("unit") : "Metric";
@@ -54,6 +49,7 @@
             loc = result.location.name;
             displayLocation = result.location;
             getSymbol(result.current.condition.code); // get weather symbol
+            localStorage.setItem("location", loc);
   		    return result;
 		} else {
 			throw new Error(await res.json());
