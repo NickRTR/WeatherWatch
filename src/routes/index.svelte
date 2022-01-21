@@ -5,6 +5,7 @@
     import {browser} from "$app/env";
 
     let loc = browser ? localStorage.getItem("location") : "New York";
+    let displayLocation = "";
     $: if (browser) {
         if (loc === "Nulles") {
             loc = "New York";
@@ -30,6 +31,8 @@
         if (res.ok) {
             const result = await res.json();
   		    suggestions = result;
+            suggestions.length = (suggestions.length === 10) ? 5 : 0; 
+            console.log(suggestions);
 		} else {
 			throw new Error(await res.json());
 		}
@@ -43,6 +46,8 @@
         if (res.ok) {
             const result = await res.json();
             loc = result.location.name;
+            displayLocation = result.location;
+            console.table(displayLocation);
             getSymbol(result.current.condition.code);
   		    return result;
 		} else {
@@ -81,6 +86,8 @@
             <p on:click|preventDefault={() => {loc = suggestion.name; handleClick()}}>{suggestion.name}</p>
         {/each}
     </div>
+
+    <p class="location">{displayLocation.name}, {displayLocation.region}, {displayLocation.country}</p>
 
     {#await promise}
         <p>Lade Wetter ...</p>
@@ -163,13 +170,22 @@
         border-radius: 1rem;
     }
 
+    p {
+        margin: 0
+    }
+
     .suggestions {
         margin-top: .5rem;
-    }
+}
 
     .suggestions p {
         cursor: pointer;
         text-decoration: underline;
+    }
+
+    .location {
+        margin-top: 1rem;
+        margin-bottom: .1rem;
     }
 
     .cards {
@@ -193,10 +209,6 @@
         margin-top: .5rem;
     }
 
-    p {
-        margin: 0;
-    }
-
     .sun {
         display: flex;
         justify-content: space-between;
@@ -217,7 +229,7 @@
 
     /* Responsive Design */
 
-    @media only screen and (max-width: 400px) {
+    @media only screen and (max-width: 450px) {
         .cards {
             grid-template-columns: 1fr;
         }
