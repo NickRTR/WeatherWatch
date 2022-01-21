@@ -2,24 +2,19 @@
     import {conditions} from "$lib/conditions.js";
     import {selectTextOnFocus} from "$lib/components/inputDirectives.js";
     import Switch from '$lib/components/Switch.svelte'
-    import { browser } from "$app/env";
+    import {browser} from "$app/env";
 
-    let loc = browser ? localStorage.getItem("location") : "New York";
-    $: if (browser) {
-        if (loc === "Nulles") {
-            loc = "New York";
-        }
-        localStorage.setItem("location", loc);
-    }
-
-    let suggestions = [];
-    let symbol = "";
+    let loc = "New York";
 
     let unit = browser ? localStorage.getItem("unit") : "Metric";
     $: if (browser) {
-            localStorage.setItem("unit", unit);
+        if (unit === null) {
+            unit = "Metric";
+        }
+        localStorage.setItem("unit", unit);
     }
 
+    let suggestions = [];
     async function getSuggestions() {
         if (loc.match(/^ *$/) !== null) {
             return;
@@ -38,6 +33,7 @@
     async function getWeather() {
         suggestions = [];
         symbol = "";
+
         const key = "bba81dedf0f34bda955161436221701";
         const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}`);
         if (res.ok) {
@@ -51,6 +47,7 @@
 		}
     }
 
+    let symbol = "";
     const getSymbol = (code) => {
         for (const condition in conditions) {
             if (conditions[condition].includes(code)) {
@@ -98,7 +95,7 @@
                 {#if unit === "Metric"}
                     <div class="left">
                         <img src="/wind.svg" alt="wind">
-                        <p>{data.current.wind_kph}km/h</p>
+                        <p>{Math.round(data.current.wind_kph)}km/h</p>
                     </div>
                     <div class="right">
                         <img src="/feelslike.svg" alt="">
@@ -107,7 +104,7 @@
                 {:else}
                     <div class="left">
                         <img src="/wind.svg" alt="wind">
-                        <p>{data.current.wind_mph}mph</p>
+                        <p>{Math.round(data.current.wind_mph)}mph</p>
                     </div>
                     <div class="right">
                         <img src="/feelslike.svg" alt="">
