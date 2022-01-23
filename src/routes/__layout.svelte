@@ -5,7 +5,7 @@
 <style>
 	* {
         font-family: 'Signika', sans-serif;
-        background-color: #1B1B3A;
+        background-color: #1E1E31;
         text-align: center;
         color: white;
     }

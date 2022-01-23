@@ -6,7 +6,7 @@
 
 <div class="Card">
     <img src="/condition/{symbol}.svg" alt={symbol}>
-    <p>{forecastData.time.substr(forecastData.time.length - 5)}</p>
+    <p>{forecastData.time.substr(11, 5)}</p>
     {#if unit === "Metric"}
         <h3>{Math.round(forecastData.temp_c)}°C</h3>
     {:else}
@@ -16,16 +16,15 @@
 
 <style>
     .Card {
-        background-color: #2C2C46;
+        background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(47,47,71,1) 100%);
         border-radius: 1rem;
-        font-size: 1.6rem;
         margin-right: .5rem;
         margin-bottom: 1rem;
     }
 
     img {
         width: 4rem;
-        margin: 0 1rem;
+        margin: 0 1.8rem;
         padding: .2rem 0;
     }
 

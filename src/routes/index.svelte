@@ -8,7 +8,6 @@
 
     // tools
     import {browser} from "$app/env";
-import { subscribe } from "svelte/internal";
 
     // variables
     const key = "bba81dedf0f34bda955161436221701";
@@ -52,7 +51,6 @@ import { subscribe } from "svelte/internal";
             const result = await res.json();
             console.log(result);
             loc = result.location.name;
-            getSymbol(result.current.condition.code); // get weather symbol
             localStorage.setItem("location", loc);
   		    return result;
 		} else {
