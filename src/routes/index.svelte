@@ -5,13 +5,13 @@
     import Switch from '$lib/components/Switch.svelte';
     import MainCard from "$lib/components/MainCard.svelte";
     import Card from "$lib/components/Card.svelte";
+    import Astro from "$lib/components/Astro.svelte";
 
     // tools
     import {browser} from "$app/env";
 
     // variables
     const key = "bba81dedf0f34bda955161436221701";
-    let symbol = "";
     let loc = browser ? localStorage.getItem("location") : "New York"; // get/save location name from/to localStorage
     let forecastType = 0;
 
@@ -49,7 +49,7 @@
         const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}&days=3`);
         if (res.ok) {
             const result = await res.json();
-            // console.log(result);
+            console.log(result);
             loc = result.location.name;
             localStorage.setItem("location", loc);
   		    return result;
@@ -62,8 +62,7 @@
     const getSymbol = (code) => {
         for (const condition in conditions) {
             if (conditions[condition].includes(code)) {
-                symbol = condition;
-                return symbol;
+                return condition;
             }
         }
     }
@@ -105,7 +104,7 @@
         <p>Lade Wetter ...</p>
     {:then data} 
         <div class="cards">
-            <MainCard data={data.current} {symbol} {unit} location={data.location}></MainCard>
+            <MainCard data={data.current} symbol={getSymbol(data.current.condition.code)} {unit} location={data.location}></MainCard>
 
             <div class="forecastnav">
                 <p class:selected="{forecastType === 0}" on:click={() => {forecastType = 0}}>Today</p>
@@ -117,6 +116,8 @@
                     <Card {forecastData} {unit} symbol={getSymbol(forecastData.condition.code)}></Card>
                 {/each}
             </div>
+
+            <Astro {data}></Astro>
         </div>
     {:catch error}
         <p class="error">Error: Ort nicht vorhanden.</p>
