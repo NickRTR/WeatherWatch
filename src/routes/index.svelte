@@ -4,10 +4,13 @@
     import MainCard from "$lib/components/MainCard.svelte";
     import Card from "$lib/components/Card.svelte";
     import Astro from "$lib/components/Astro.svelte";
+    import Air from '$lib/components/Air.svelte';
+    import View from '$lib/components/View.svelte';
     // tools
     import {conditions} from "$lib/conditions.js";
     import {browser} from "$app/env";
     import {selectTextOnFocus} from "$lib/selectText.js";
+import { dataset_dev } from 'svelte/internal';
 
     // variables
     const key = "bba81dedf0f34bda955161436221701";
@@ -45,7 +48,7 @@
     async function getWeather() {
         suggestions = []; 
         loc = (loc === null) ? "New York" : loc;
-        const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}&days=3`);
+        const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}&days=3&aqi=yes`);
         if (res.ok) {
             const result = await res.json();
             console.log(result);
@@ -83,9 +86,9 @@
 </script>
 
 <body>
-    <h1>Weatherwatch</h1>
+    <h1 style="margin: .8rem 0; color: #FF9700;">Weatherwatch</h1>
 
-    <div class="unit">
+    <div class="unit" style="margin-bottom: .8rem;">
         <Switch bind:value={unit} label="" design="multi" options={['Metric', 'Imperial']} fontSize={18}/>
     </div>
 
@@ -103,7 +106,7 @@
     {#await promise}
         <p>Lade Wetter ...</p>
     {:then data} 
-        <div class="cards">
+        <div class="cards" style="margin: 1rem;">
             <MainCard data={data.current} symbol={getSymbol(data.current.condition.code)} {unit} location={data.location}></MainCard>
 
             <div class="forecastnav">
@@ -118,23 +121,15 @@
             </div>
 
             <Astro {data}></Astro>
+            <Air uv={data.current.uv} quality={data.current.air_quality["us-epa-index"]}></Air>
+            <View {unit} data={data.current}></View>
         </div>
     {:catch error}
-        <p class="error">Error: Ort nicht vorhanden.</p>
+        <p class="error" style="color: red; margin-top: .5rem">Error: Ort nicht vorhanden.</p>
     {/await}
 </body>
 
 <style>
-    h1 {
-        margin: .8rem 0;
-        letter-spacing: .1rem;
-        color: #FF9700;
-    }
-
-    .unit {
-        margin-bottom: .8rem;
-    }
-
     input {
         border: none;
         border-radius: 1rem;
@@ -161,11 +156,6 @@
         cursor: pointer;
         text-decoration: underline;
     }
-
-    .cards {
-        margin: 1rem;
-    }
-
     .forecastnav {
         display: flex;
         text-align: left;
@@ -186,11 +176,6 @@
         overflow-x: scoll;
         overflow-y: hidden;
         white-space: nowrap;
-    }
-
-    .error {
-        color: red;
-        margin-top: .5rem;
     }
 
     /* Responsive Design */
