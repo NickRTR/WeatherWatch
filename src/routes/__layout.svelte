@@ -3,12 +3,11 @@
 </body>
 
 <style>
-	:global(body) {
+	* {
         font-family: 'Signika', sans-serif;
-		/* background: rgb(4,0,79); */
-        /* background: linear-gradient(0deg, rgba(4,0,79,1) 10%, rgba(255,177,61,1) 100%); */
-        background-color: #84AFE6;
+        background-color: #1B1B3A;
         text-align: center;
+        color: white;
     }
 
     body {

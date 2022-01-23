@@ -3,9 +3,12 @@
     import {conditions} from "$lib/conditions.js";
     import {selectTextOnFocus} from "$lib/components/inputDirectives.js";
     import Switch from '$lib/components/Switch.svelte';
+    import MainCard from "$lib/components/MainCard.svelte";
+    import Card from "$lib/components/Card.svelte";
 
     // tools
     import {browser} from "$app/env";
+import { dataset_dev } from "svelte/internal";
 
     // variables
     const key = "bba81dedf0f34bda955161436221701";
@@ -25,7 +28,8 @@
     // on Input: fetch suggestions from API
     let suggestions = [];
     async function getSuggestions() {
-        if (loc.match(/^ *$/) !== null) {   // If Input is empty or just spaces, don't show suggestions
+        // If Input is empty or just spaces, don't show suggestions
+        if (loc.match(/^ *$/) !== null) {
             return;
         }
         const res = await fetch(`https://api.weatherapi.com/v1/search.json?key=${key}&q=${loc}`);
@@ -46,6 +50,7 @@
         const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}`);
         if (res.ok) {
             const result = await res.json();
+            console.log(result);
             loc = result.location.name;
             displayLocation = result.location;
             getSymbol(result.current.condition.code); // get weather symbol
@@ -61,13 +66,14 @@
         for (const condition in conditions) {
             if (conditions[condition].includes(code)) {
                 symbol = condition;
+                return symbol;
             }
         }
     }
 </script>
 
 <body>
-    <h1>Hello</h1>
+    <h1>Weatherwatch</h1>
 
     <div class="unit">
         <Switch bind:value={unit} label="" design="multi" options={['Metric', 'Imperial']} fontSize={18}/>
@@ -84,57 +90,21 @@
         {/each}
     </div>
 
-    <p class="location">{displayLocation.name}, {displayLocation.region}, {displayLocation.country}</p>
-
     {#await promise}
         <p>Lade Wetter ...</p>
     {:then data} 
         <div class="cards">
-            <div class="card temp">
-                <img src="/condition/{symbol}.svg" alt={symbol}>
-                {#if unit === "Metric"}
-                    <p>{data.current.condition.text}, {Math.round(data.current.temp_c)}°C</p>
-                {:else}
-                    <p>{data.current.condition.text}, {Math.round(data.current.temp_f)}F</p>
-                {/if}
-            </div>
-            <div class="card wind">
-                {#if unit === "Metric"}
-                    <div class="left">
-                        <img src="/wind.svg" alt="wind">
-                        <p>{Math.round(data.current.wind_kph)}km/h</p>
-                    </div>
-                    <div class="right">
-                        <img src="/feelslike.svg" alt="">
-                        <p>{Math.round(data.current.feelslike_c)}°C</p>
-                    </div>
-                {:else}
-                    <div class="left">
-                        <img src="/wind.svg" alt="wind">
-                        <p>{Math.round(data.current.wind_mph)}mph</p>
-                    </div>
-                    <div class="right">
-                        <img src="/feelslike.svg" alt="">
-                        <p>{Math.round(data.current.feelslike_f)}F</p>
-                    </div>
-                {/if}
-            </div>
+            <MainCard data={data.current} {symbol} {unit} location={data.location}></MainCard>
 
-            <div class="card humidity">
-                <img src="/humidity.svg" alt="humidity">
-                <p>Humidity: {data.current.humidity}%</p>
+            <div class="forecastnav">
+                <p style="color: #FF9700;">Today</p>
+                <p>Tomorrow</p>
+                <p>next 7 days</p>
             </div>
-
-            <div class="card sun">
-                <div class="sunrise">
-                    <img src="/sunrise.svg" alt="sunrise">
-                    <p>{data.forecast.forecastday[0].astro.sunrise}</p>
-                </div>
-                <div class="sunset">
-                    <img src="/sunrise.svg" alt="sunrise">
-                    <p>{data.forecast.forecastday[0].astro.sunset}</p>
-                </div>
-                
+            <div class="forecast">
+                {#each data.forecast.forecastday[0].hour as data}
+                    <Card {data} {unit} symbol={getSymbol(data.condition.code)}></Card>
+                {/each}
             </div>
         </div>
     {:catch error}
@@ -144,9 +114,9 @@
 
 <style>
     h1 {
-        margin-top: .8rem;
-        margin-bottom: .7rem; 
-        letter-spacing: .2rem;
+        margin: .8rem 0;
+        letter-spacing: .1rem;
+        color: #FF9700;
     }
 
     .unit {
@@ -180,43 +150,25 @@
         text-decoration: underline;
     }
 
-    .location {
-        margin-top: 1rem;
-        margin-bottom: .1rem;
-    }
-
     .cards {
-        margin: 0 1rem;
-        margin-top: 1rem;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
+        margin: 1rem;
     }
 
-    .card {
-        background-color: white;
-        border-radius: 1rem;
-        font-size: 1.6rem;
-        box-shadow: 0 0 .5rem black;
-    }
-
-    .card img {
-        width: 3.5rem;
-        margin: 0;
-        margin-top: .5rem;
-    }
-
-    .sun {
+    .forecastnav {
         display: flex;
-        justify-content: space-between;
-        padding: 0 1rem;
+        text-align: left;
     }
 
-    .wind {
+    .forecastnav p {
+        margin: 1rem .5rem;
+        font-size: 1.2rem;
+    }
+
+    .forecast {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 2rem;
+        overflow-x: scoll;
+        overflow-y: hidden;
+        white-space: nowrap;
     }
 
     .error {
