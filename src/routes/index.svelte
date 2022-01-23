@@ -49,7 +49,7 @@
         const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}&days=3`);
         if (res.ok) {
             const result = await res.json();
-            console.log(result);
+            // console.log(result);
             loc = result.location.name;
             localStorage.setItem("location", loc);
   		    return result;
@@ -110,7 +110,7 @@
             <div class="forecastnav">
                 <p class:selected="{forecastType === 0}" on:click={() => {forecastType = 0}}>Today</p>
                 <p class:selected="{forecastType === 1}" on:click={() => {forecastType = 1}}>Tomorrow</p>
-                <p class:selected="{forecastType === 2}" on:click={() => {forecastType = 2}}>Day after tomoroww</p>
+                <p class:selected="{forecastType === 2}" on:click={() => {forecastType = 2}}>Overmorrow</p>
             </div>
             <div class="forecast">
                 {#each getForecast(data, forecastType) as forecastData}

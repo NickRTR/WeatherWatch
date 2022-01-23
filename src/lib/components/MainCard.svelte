@@ -9,18 +9,18 @@
     <h2>Today</h2>
     {#if unit === "Metric"}
         <div class="weather">
-            <h3>{Math.round(data.temp_c)}°C</h3>
+            <h3>{Math.round(data.temp_c)}<em>°C</em></h3>
             <img src="/condition/{symbol}.svg" alt={symbol}>
         </div>
         <div class="infos">
             <div class="wind">
                 <img src="/wind.svg" alt="">
-                <p class="data">{data.wind_kph}km/h</p>
+                <p class="data">{Math.round(data.wind_kph)}km/h</p>
                 <p class="description">Wind</p>
             </div>
             <div class="feels">
                 <img src="/feelslike.svg" alt="">
-                <p class="data">{data.feelslike_c}°C</p>
+                <p class="data">{Math.round(data.feelslike_c)}°C</p>
                 <p class="description">Feelslike</p>
             </div>
             <div class="humidty">
@@ -31,21 +31,25 @@
         </div>
     {:else}
         <div class="weather">
-            <h3>{Math.round(data.temp_f)}F</h3>
+            <h3>{Math.round(data.temp_f)}<em>F</em></h3>
             <img src="/condition/{symbol}.svg" alt={symbol}>
         </div>
         <div class="additional">
             <div class="infos">
                 <div class="wind">
                     <img src="/wind.svg" alt="">
-                    <p class="data">{data.wind_kph}km/h</p>
+                    <p class="data">{Math.round(data.wind_mph)}mph</p>
                     <p class="description">Wind</p>
                 </div>
                 <div class="feels">
-
+                    <img src="/feelslike.svg" alt="">
+                    <p class="data">{Math.round(data.feelslike_f)}F</p>
+                    <p class="description">Feelslike</p>
                 </div>
                 <div class="humidty">
-
+                    <img src="/humidity.svg" alt="">
+                    <p class="data">{data.humidity}%</p>
+                    <p class="description">Humidty</p>
                 </div>
             </div>
         </div>
@@ -76,7 +80,11 @@
         text-align: left;
         font-size: 3rem;
         margin: 0;
+    }
+
+    em {
         color: #FF9700;
+        font-style: normal;
     }
 
     .weather {
@@ -87,8 +95,9 @@
     }
 
     .infos {
+        margin-top: .5rem;
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
     }
 
     .infos img {
