@@ -53,7 +53,7 @@ import { dataset_dev } from 'svelte/internal';
             const result = await res.json();
             console.log(result);
             loc = result.location.name;
-            localStorage.setItem("location", loc);
+            localStorage.setItem("location", `${result.location.name} ${result.location.region}`);
   		    return result;
 		} else {
 			throw new Error(await res.json());
