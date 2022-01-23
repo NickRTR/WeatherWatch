@@ -1,14 +1,13 @@
 <script>
-    // packages
-    import {conditions} from "$lib/conditions.js";
-    import {selectTextOnFocus} from "$lib/components/inputDirectives.js";
+    // components
     import Switch from '$lib/components/Switch.svelte';
     import MainCard from "$lib/components/MainCard.svelte";
     import Card from "$lib/components/Card.svelte";
     import Astro from "$lib/components/Astro.svelte";
-
     // tools
+    import {conditions} from "$lib/conditions.js";
     import {browser} from "$app/env";
+    import {selectTextOnFocus} from "$lib/selectText.js";
 
     // variables
     const key = "bba81dedf0f34bda955161436221701";
@@ -67,6 +66,7 @@
         }
     }
 
+    // get correct forecast for specific day
     const getForecast = (result, day) => {
         let now = result.location.localtime.substr(11, 2);
         let forecast = result.forecast.forecastday[day].hour; // weather report per hour
