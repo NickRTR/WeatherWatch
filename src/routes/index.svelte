@@ -8,13 +8,13 @@
 
     // tools
     import {browser} from "$app/env";
-import { dataset_dev } from "svelte/internal";
+import { subscribe } from "svelte/internal";
 
     // variables
     const key = "bba81dedf0f34bda955161436221701";
     let symbol = "";
     let loc = browser ? localStorage.getItem("location") : "New York"; // get/save location name from/to localStorage
-    let displayLocation = ""; // whole location data for region print
+    let forecastType = 0;
 
     // get/set preffered unit from/to localStorage
     let unit = browser ? localStorage.getItem("unit") : "Metric";
@@ -47,12 +47,11 @@ import { dataset_dev } from "svelte/internal";
     async function getWeather() {
         suggestions = []; 
         loc = (loc === null) ? "New York" : loc;
-        const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}`);
+        const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}&days=3`);
         if (res.ok) {
             const result = await res.json();
             console.log(result);
             loc = result.location.name;
-            displayLocation = result.location;
             getSymbol(result.current.condition.code); // get weather symbol
             localStorage.setItem("location", loc);
   		    return result;
@@ -68,6 +67,20 @@ import { dataset_dev } from "svelte/internal";
                 symbol = condition;
                 return symbol;
             }
+        }
+    }
+
+    const getForecast = (result, day) => {
+        let now = result.location.localtime.substr(11, 2);
+        let forecast = result.forecast.forecastday[day].hour; // weather report per hour
+        let forecastArray = [];
+        if (day === 0) {
+            for (let i = Number(now) + 1; i < forecast.length; i++) {
+                forecastArray.push(forecast[i]);
+            }
+            return forecastArray;
+        } else {
+            return forecast;
         }
     }
 </script>
@@ -97,13 +110,13 @@ import { dataset_dev } from "svelte/internal";
             <MainCard data={data.current} {symbol} {unit} location={data.location}></MainCard>
 
             <div class="forecastnav">
-                <p style="color: #FF9700;">Today</p>
-                <p>Tomorrow</p>
-                <p>next 7 days</p>
+                <p class:selected="{forecastType === 0}" on:click={() => {forecastType = 0}}>Today</p>
+                <p class:selected="{forecastType === 1}" on:click={() => {forecastType = 1}}>Tomorrow</p>
+                <p class:selected="{forecastType === 2}" on:click={() => {forecastType = 2}}>Day after tomoroww</p>
             </div>
             <div class="forecast">
-                {#each data.forecast.forecastday[0].hour as data}
-                    <Card {data} {unit} symbol={getSymbol(data.condition.code)}></Card>
+                {#each getForecast(data, forecastType) as forecastData}
+                    <Card {forecastData} {unit} symbol={getSymbol(forecastData.condition.code)}></Card>
                 {/each}
             </div>
         </div>
@@ -138,7 +151,7 @@ import { dataset_dev } from "svelte/internal";
     }
 
     p {
-        margin: 0
+        margin: 0;
     }
 
     .suggestions {
@@ -162,6 +175,11 @@ import { dataset_dev } from "svelte/internal";
     .forecastnav p {
         margin: 1rem .5rem;
         font-size: 1.2rem;
+        cursor: pointer;
+    }
+
+    .selected {
+        color: #FF9700;
     }
 
     .forecast {

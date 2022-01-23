@@ -22,11 +22,10 @@
     .Card {
         background-color: #2C2C46;
         border-radius: 1rem;
-        font-size: 1.6rem;
     }
 
     h2 {
-        font-size: 2rem;
+        font-size: 1.5rem;
         margin: 0;
         padding-left: 1rem;
         padding-top: .5rem;
@@ -34,13 +33,13 @@
     }
 
     img {
-        width: 7rem;
+        width: 6rem;
         padding: 0;
     }
 
     h3 {
         text-align: left;
-        font-size: 4rem;
+        font-size: 3rem;
         margin: 0;
         color: #FF9700;
     }
@@ -53,7 +52,7 @@
     }
 
     p {
-        font-size: 1.2rem;
+        font-size: 1rem;
         margin: 0;
         padding: .5rem;
         padding-top: 1rem;
