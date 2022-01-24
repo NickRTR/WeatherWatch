@@ -10,9 +10,9 @@
     import {conditions} from "$lib/conditions.js";
     import {browser} from "$app/env";
     import {selectTextOnFocus} from "$lib/selectText.js";
+    import {API_KEY} from '$lib/env.js';
 
     // variables
-    const key = "bba81dedf0f34bda955161436221701";
     let loc = browser ? localStorage.getItem("location") : "New York"; // get/save location name from/to localStorage
     let forecastType = 0;
 
@@ -32,7 +32,7 @@
         if (loc.match(/^ *$/) !== null) {
             return;
         }
-        const res = await fetch(`https://api.weatherapi.com/v1/search.json?key=${key}&q=${loc}`);
+        const res = await fetch(`https://api.weatherapi.com/v1/search.json?key=${API_KEY}&q=${loc}`);
         if (res.ok) {
             const result = await res.json();
   		    suggestions = result;
@@ -47,7 +47,7 @@
     async function getWeather() {
         suggestions = []; 
         loc = (loc === null) ? "New York" : loc;
-        const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}&days=3&aqi=yes`);
+        const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${loc}&days=3&aqi=yes`);
         if (res.ok) {
             const result = await res.json();
             // console.log(result);
