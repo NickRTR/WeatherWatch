@@ -10,15 +10,11 @@
     import {conditions} from "$lib/conditions.js";
     import {browser} from "$app/env";
     import {selectTextOnFocus} from "$lib/selectText.js";
-    import {API_KEY} from '$lib/env.js';
-
-    let ApiKey;
+    
+    let API_KEY = import.meta.env.VITE_API_KEY;
+    // if production, get KEY from Vercel
     if (process.env.NODE_ENV === 'production') {
-        // For production
-        ApiKey = process.env.API_KEY;
-    } else {
-        // For development
-        ApiKey = API_KEY;
+        API_KEY = process.env.API_KEY;
     }
 
     // variables
@@ -41,7 +37,7 @@
         if (loc.match(/^ *$/) !== null) {
             return;
         }
-        const res = await fetch(`https://api.weatherapi.com/v1/search.json?key=${ApiKey}&q=${loc}`);
+        const res = await fetch(`https://api.weatherapi.com/v1/search.json?key=${API_KEY}&q=${loc}`);
         if (res.ok) {
             const result = await res.json();
   		    suggestions = result;
@@ -56,7 +52,7 @@
     async function getWeather() {
         suggestions = []; 
         loc = (loc === null) ? "New York" : loc;
-        const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${ApiKey}&q=${loc}&days=3&aqi=yes`);
+        const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${loc}&days=3&aqi=yes`);
         if (res.ok) {
             const result = await res.json();
             // console.log(result);
