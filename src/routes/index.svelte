@@ -117,6 +117,8 @@ import { dataset_dev } from 'svelte/internal';
             <div class="forecast">
                 {#each getForecast(data, forecastType) as forecastData}
                     <Card {forecastData} {unit} symbol={getSymbol(forecastData.condition.code)}></Card>
+                {:else}
+                    <p style="color: red;">Currently no weather data available for this day. Please try to relaod!</p>
                 {/each}
             </div>
 

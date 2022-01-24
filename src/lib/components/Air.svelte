@@ -36,8 +36,6 @@
         case 6:
             quality = "Hazardous";
             break;
-        default:
-            break;
     }
 </script>
 
