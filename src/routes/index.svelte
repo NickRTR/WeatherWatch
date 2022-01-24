@@ -10,7 +10,6 @@
     import {conditions} from "$lib/conditions.js";
     import {browser} from "$app/env";
     import {selectTextOnFocus} from "$lib/selectText.js";
-import { dataset_dev } from 'svelte/internal';
 
     // variables
     const key = "bba81dedf0f34bda955161436221701";
@@ -51,7 +50,7 @@ import { dataset_dev } from 'svelte/internal';
         const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${loc}&days=3&aqi=yes`);
         if (res.ok) {
             const result = await res.json();
-            console.log(result);
+            // console.log(result);
             loc = result.location.name;
             localStorage.setItem("location", `${result.location.name} ${result.location.region}`);
   		    return result;

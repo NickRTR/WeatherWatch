@@ -1,7 +1,5 @@
 # Weather Watch
 
-> I would like to contribute with someone on this Project. If you want to have some fun building a beautiful weather app you're welcome to write me at nickrtrrtr@gmail.com! 
-
 <p>
     <img src="./static/condition/sun.svg" width=100>
     <img src="./static/condition/partly cloudy.svg" width=100>
@@ -12,22 +10,20 @@
     <img src="./static/condition/thunder.svg" width=100>
 </p>
 
-Weather Watch is a very basic weather report built in Sveltekit.. Currently it only shows the current weather. The data is delivered by the free API from https://www.weatherapi.com/.
+Weather Watch is a very basic weather report built in Sveltekit.. Currently it only shows the current weather and a weather forecast for 3 days. The data is delivered by the free API from https://www.weatherapi.com/.
 
 ## Functionality
 
 - Switch between Metric and Imperial units
-- Description and Symbol for 7 different weather conditions
+- 7 different weather conditions
 - Temperature
 - Wind speed
 - Felt temperature
 - Air Humidity
 - Sunrise and Sunset times
-
-## Next Steps
-
-- Weather forecast
-- Fundamental Ui improvements
+- Uv Index and Air quality
+- Visibility distance
+- Hourly forecast for 3 days
 
 ---
 
