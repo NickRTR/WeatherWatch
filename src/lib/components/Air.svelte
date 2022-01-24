@@ -1,6 +1,21 @@
 <script>
     export let uv;
     export let quality;
+    let burntime = 60;
+
+    if (uv === 1 || uv === 2) {
+        uv = "Low";
+        burntime = 60;
+    } else if (uv === 3 || uv === 4 || uv === 5) {
+        uv = "Moderate";
+        burntime = 45;
+    } else if (uv === 6 || uv === 7) {
+        uv = "High";
+        burntime = 30;
+    } else if (uv === 8 || uv === 9 || uv === 10) {
+        uv = "Very High";
+        burntime = 15-20;
+    }
 
     switch (quality) {
         case 1:
@@ -30,6 +45,7 @@
     <div class="sunrise">
         <img src="/uv.svg" alt="uv">
         <p>UV index: {uv}</p>
+        <p style="margin-top: -.5rem;">Burn time: {burntime} <em>Minutes</em></p>
     </div>
     <div class="sunset">
         <img src="/air.svg" alt="air quality">
@@ -55,5 +71,10 @@
     p {
         margin: 0;
         margin-bottom: .5rem;
+    }
+
+    em {
+        color: #FF9700;
+        font-style: normal;
     }
 </style>

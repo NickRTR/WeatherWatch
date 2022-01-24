@@ -21,12 +21,12 @@
             <div class="feels">
                 <img src="/feelslike.svg" alt="">
                 <p class="data">{Math.round(data.feelslike_c)}°C</p>
-                <p class="description">Feelslike</p>
+                <p class="description">Feels like</p>
             </div>
             <div class="humidty">
                 <img src="/humidity.svg" alt="">
                 <p class="data">{data.humidity}%</p>
-                <p class="description">Humidty</p>
+                <p class="description">Humidity</p>
             </div>
         </div>
     {:else}
@@ -44,7 +44,7 @@
                 <div class="feels">
                     <img src="/feelslike.svg" alt="">
                     <p class="data">{Math.round(data.feelslike_f)}F</p>
-                    <p class="description">Feelslike</p>
+                    <p class="description">Feels like</p>
                 </div>
                 <div class="humidty">
                     <img src="/humidity.svg" alt="">

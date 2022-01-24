@@ -7,12 +7,12 @@
     <img src="view.svg" alt="View Distance">
     {#if unit === "Metric"}
         <div>
-            <p>View Distance:</p>
+            <p>Visibility:</p>
             <h3>{Math.round(data.vis_km)}<em>km</em></h3>
         </div>
     {:else}
         <div>
-            <p>View Distance:</p>
+            <p>Visibility:</p>
             <h3>{Math.round(data.vis_miles)}<em>Miles</em></h3>
         </div>
     {/if}
