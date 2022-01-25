@@ -19,7 +19,7 @@
         background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(47,47,71,1) 100%);
         border-radius: 1rem;
         margin-right: .5rem;
-        margin-bottom: 1rem;
+        margin-bottom: .55rem;
     }
 
     img {

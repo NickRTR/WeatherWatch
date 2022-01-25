@@ -16,7 +16,8 @@
 
 <style>
     .astro {
-        margin: 1rem 0;
+        margin-bottom: 1rem;
+        margin-top: .25rem;
         background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(47,47,71,1) 100%);
         border-radius: 1rem;
         display: flex;

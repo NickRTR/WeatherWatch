@@ -180,14 +180,7 @@
         overflow-x: scoll;
         overflow-y: hidden;
         white-space: nowrap;
-    }
-
-    /* Responsive Design */
-    
-    @media only screen and (max-width: 450px) {
-        .cards {
-            grid-template-columns: 1fr;
-        }
+        margin-bottom: .5rem;
     }
 
     /* Scroll Bar */
