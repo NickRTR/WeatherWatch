@@ -75,11 +75,11 @@
 
     // get correct forecast for specific day
     const getForecast = (result, day) => {
-        let now = result.location.localtime.substr(11, 2);
+        let now = result.location.localtime.substr(11, 2).replace(":", ""); // filter only hour from time and replace : for one digit times like 6:40
         let forecast = result.forecast.forecastday[day].hour; // weather report per hour
         let forecastArray = [];
         if (day === 0) {
-            for (let i = Number(now) + 1; i < forecast.length; i++) {
+            for (let i = Number(now) + 1; i < 24; i++) {
                 forecastArray.push(forecast[i]);
             }
             return forecastArray;
@@ -121,8 +121,6 @@
             <div class="forecast">
                 {#each getForecast(data, forecastType) as forecastData}
                     <Card {forecastData} {unit} symbol={getSymbol(forecastData.condition.code)}></Card>
-                {:else}
-                    <p style="color: red;">Currently no weather data available for this day. Please try to relaod!</p>
                 {/each}
             </div>
 
