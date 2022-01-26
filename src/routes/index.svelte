@@ -126,7 +126,7 @@
 
             <Astro {data}></Astro>
             <Air uv={data.current.uv} quality={data.current.air_quality["us-epa-index"]}></Air>
-            <View {unit} data={data.current}></View>
+            <!-- <View {unit} data={data.current}></View> -->
         </div>
     {:catch error}
         <p class="error" style="color: red; margin-top: .5rem">Error: Ort nicht vorhanden.</p>
