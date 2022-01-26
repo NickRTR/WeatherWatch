@@ -3,7 +3,7 @@
     export let data;
 </script>
 
-<div class="air">
+<div class="air gradient">
     <img src="view.svg" alt="View Distance">
     {#if unit === "Metric"}
         <div>
@@ -20,8 +20,6 @@
 
 <style>
     .air {
-        background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(47,47,71,1) 100%);
-        border-radius: 1rem;
         display: flex;
         justify-content: space-around;
         align-items: center;

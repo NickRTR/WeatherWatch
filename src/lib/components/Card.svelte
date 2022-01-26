@@ -4,7 +4,7 @@
     export let unit;
 </script>
 
-<div class="Card">
+<div class="card gradient">
     <img src="/condition/{symbol}.svg" alt={symbol}>
     <p>{forecastData.time.substr(11, 5)}</p>
     {#if unit === "Metric"}
@@ -15,9 +15,7 @@
 </div>
 
 <style>
-    .Card {
-        background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(47,47,71,1) 100%);
-        border-radius: 1rem;
+    .card {
         margin-right: .5rem;
         margin-bottom: .55rem;
     }

@@ -5,7 +5,7 @@
     export let location;
 </script>
 
-<div class="Card">
+<div class="card gradient">
     <h2>Today</h2>
     {#if unit === "Metric"}
         <div class="weather">
@@ -58,11 +58,6 @@
 </div>
 
 <style>
-    .Card {
-        background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(47,47,71,1) 100%);
-        border-radius: 1rem;
-    }
-
     h2 {
         font-size: 1.5rem;
         margin: 0;

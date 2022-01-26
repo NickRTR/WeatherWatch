@@ -39,7 +39,7 @@
     }
 </script>
 
-<div class="air">
+<div class="air gradient">
     <div class="sunrise">
         <img src="/uv.svg" alt="uv">
         <p>UV index: {uv}</p>
@@ -54,8 +54,6 @@
 <style>
     .air {
         margin: 1rem 0;
-        background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(47,47,71,1) 100%);
-        border-radius: 1rem;
         display: flex;
         justify-content: space-around;
         align-items: center;
