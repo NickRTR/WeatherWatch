@@ -71,6 +71,7 @@
                 return condition;
             }
         }
+        // return code;
     }
 
     // get correct forecast for specific day
