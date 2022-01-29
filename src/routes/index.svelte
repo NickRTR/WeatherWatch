@@ -5,7 +5,8 @@
     import Card from "$lib/components/Card.svelte";
     import Astro from "$lib/components/Astro.svelte";
     import Air from '$lib/components/Air.svelte';
-    import View from '$lib/components/View.svelte';
+    // import View from '$lib/components/View.svelte';
+
     // tools
     import {conditions} from "$lib/conditions.js";
     import {browser} from "$app/env";
@@ -91,7 +92,7 @@
 </script>
 
 <body>
-    <h1 style="margin: .8rem 0; color: #FF9700;">Weatherwatch</h1>
+    <h1>Weatherwatch</h1>
 
     <div class="unit" style="margin-bottom: .8rem;">
         <Switch bind:value={unit} label="" design="multi" options={['Metric', 'Imperial']} fontSize={18}/>
@@ -135,6 +136,11 @@
 </body>
 
 <style>
+    h1 {
+        margin: .8rem 0;
+        color: var(--accent);
+    }
+
     input {
         border: none;
         border-radius: 1rem;
@@ -173,7 +179,7 @@
     }
 
     .selected {
-        color: #FF9700;
+        color: var(--accent);
     }
 
     .forecast {
@@ -199,7 +205,7 @@
 
     /* Handle */
     ::-webkit-scrollbar-thumb {
-        background: #FF9700;
+        background: var(--accent);
         border-radius: 10px;
     }
 </style>

@@ -34,7 +34,7 @@
     }
 
     em {
-        color: #FF9700;
+        color: var(--accent);
         font-style: normal;
     }
 

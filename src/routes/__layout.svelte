@@ -1,6 +1,28 @@
+<script context="module">
+	export async function load() {
+		const res = await fetch("https://api.adviceslip.com/advice");
+		const data = await res.json();
+
+		return {
+            props: {
+                advice: data.slip.advice
+            }
+        }
+	}
+</script>
+
+<script>
+    export let advice;
+</script>
+
 <body>
     <slot></slot>
 </body>
+
+<footer>
+    <p>Your daily advice: <em>{advice}</em></p>
+    <p class="copyright">©2022 Nick Reutlinger</p>
+</footer>
 
 <style>
 	* {
@@ -15,8 +37,22 @@
         margin: 0 auto;
     }
 
+    em {
+        color: var(--accent);
+        font-style: normal;
+    }
+
+    .copyright {
+        margin-bottom: .5rem;
+        margin-top: -.4rem;
+    }
+
     :global(.gradient) {
         background: linear-gradient(0deg, rgba(0,0,0,0.3) 10%, rgba(47,47,71,1) 100%);
         border-radius: 1rem;
+    }
+    
+    :global(:root) {
+        --accent: red;
     }
 </style>
