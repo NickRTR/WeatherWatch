@@ -20,7 +20,7 @@
 </body>
 
 <footer>
-    <p>Your daily advice: <em>{advice}</em></p>
+    <p style="margin: 0 .5rem;">Your daily advice: <em>{advice}</em></p>
     <p class="copyright">©2022 Nick Reutlinger</p>
 </footer>
 
@@ -43,8 +43,7 @@
     }
 
     .copyright {
-        margin-bottom: .5rem;
-        margin-top: -.4rem;
+        margin: .5rem;
     }
 
     :global(.gradient) {

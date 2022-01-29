@@ -62,7 +62,7 @@
         font-size: 1.5rem;
         margin: 0;
         padding-left: 1rem;
-        padding-top: .5rem;
+        padding-top: .7rem;
         text-align: left;
     }
 
