@@ -1,3 +1,16 @@
+<script context="module">
+	export async function load() {
+		const res = await fetch("https://api.adviceslip.com/advice");
+		const data = await res.json();
+
+		return {
+            props: {
+                advice: data.slip.advice
+            }
+        }
+	}
+</script>
+
 <script>
     // components
     import Switch from '$lib/components/Switch.svelte';
@@ -5,6 +18,7 @@
     import Card from "$lib/components/Card.svelte";
     import Astro from "$lib/components/Astro.svelte";
     import Air from '$lib/components/Air.svelte';
+    import DailyAdvice from '$lib/components/DailyAdvice.svelte';
     // import View from '$lib/components/View.svelte';
 
     // tools
@@ -17,6 +31,8 @@
     if (process.env.NODE_ENV === 'production') {
         API_KEY = process.env.API_KEY;
     }
+
+    export let advice;
 
     // variables
     let loc = browser ? localStorage.getItem("location") : "New York"; // get/save location name from/to localStorage
@@ -129,6 +145,7 @@
             <Astro {data}></Astro>
             <Air uv={data.current.uv} quality={data.current.air_quality["us-epa-index"]}></Air>
             <!-- <View {unit} data={data.current}></View> -->
+            <DailyAdvice {advice}></DailyAdvice>
         </div>
     {:catch error}
         <p class="error" style="color: red; margin-top: .5rem">Error: Ort nicht vorhanden.</p>

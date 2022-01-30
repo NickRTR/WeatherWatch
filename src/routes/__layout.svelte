@@ -1,27 +1,9 @@
-<script context="module">
-	export async function load() {
-		const res = await fetch("https://api.adviceslip.com/advice");
-		const data = await res.json();
-
-		return {
-            props: {
-                advice: data.slip.advice
-            }
-        }
-	}
-</script>
-
-<script>
-    export let advice;
-</script>
-
 <body>
     <slot></slot>
 </body>
 
 <footer>
-    <p style="margin: 0 .5rem;">Your daily advice: <em>{advice}</em></p>
-    <p class="copyright">©2022 Nick Reutlinger</p>
+    <p>©2022 Nick Reutlinger</p>
 </footer>
 
 <style>
@@ -35,15 +17,6 @@
     body {
         max-width: 700px;
         margin: 0 auto;
-    }
-
-    em {
-        color: var(--accent);
-        font-style: normal;
-    }
-
-    .copyright {
-        margin: .5rem;
     }
 
     :global(.gradient) {
