@@ -1,4 +1,6 @@
 <script>
+import { conditions } from "$lib/conditions";
+
     export let data;
     export let symbol;
     export let unit;
@@ -12,6 +14,7 @@
             <h3>{Math.round(data.temp_c)}<em>°C</em></h3>
             <img src="/condition/{symbol}.svg" alt={symbol}>
         </div>
+        <p>Condition: {data.condition.text}</p>
         <div class="infos">
             <div class="wind">
                 <img src="/wind.svg" alt="">
