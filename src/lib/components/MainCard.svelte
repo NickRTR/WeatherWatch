@@ -1,6 +1,4 @@
 <script>
-import { conditions } from "$lib/conditions";
-
     export let data;
     export let symbol;
     export let unit;
@@ -58,6 +56,7 @@ import { conditions } from "$lib/conditions";
         </div>
     {/if}
     <p class="location">{location.name}, {location.region}, {location.country}</p>
+    <button type="button" on:click>Add location to favourites</button>
 </div>
 
 <style>
@@ -121,5 +120,14 @@ import { conditions } from "$lib/conditions";
         font-size: 1rem;
         margin: 0;
         padding: .5rem;
+    }
+
+    button {
+        border-radius: 1rem;
+        background-color: greenyellow;
+        border: none;
+        margin-bottom: .5rem;
+        padding: .25rem .5rem;
+        padding-bottom: .2rem;
     }
 </style>

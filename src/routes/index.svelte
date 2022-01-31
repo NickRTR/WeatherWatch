@@ -26,13 +26,14 @@
     import {browser} from "$app/env";
     import {selectTextOnFocus} from "$lib/selectText.js";
     
+    // export variables
+    export let advice;
+
     let API_KEY = import.meta.env.VITE_API_KEY;
     // if production, get KEY from Vercel
     if (process.env.NODE_ENV === 'production') {
         API_KEY = process.env.API_KEY;
     }
-
-    export let advice;
 
     // variables
     let loc = browser ? localStorage.getItem("location") : "New York"; // get/save location name from/to localStorage
@@ -45,6 +46,16 @@
             unit = "Metric";
         }
         localStorage.setItem("unit", unit);
+    }
+
+    let showFav = false;
+    // get favourites from localStorage
+    let favourites = browser ? JSON.parse(localStorage.getItem("fav")) : [];
+    $: if (browser) {
+        if (favourites === null) {
+            favourites = [];
+        }
+        localStorage.setItem("fav", JSON.stringify(favourites)); // if now favourites stored, store empty Array
     }
 
     // on Input: fetch suggestions from API
@@ -68,11 +79,11 @@
     let promise = getWeather();
     async function getWeather() {
         suggestions = []; 
+        showFav = false;
         loc = (loc === null) ? "New York" : loc;
         const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${loc}&days=3&aqi=yes`);
         if (res.ok) {
             const result = await res.json();
-            // console.log(result);
             loc = result.location.name;
             localStorage.setItem("location", `${result.location.name} ${result.location.region}`);
   		    return result;
@@ -105,31 +116,64 @@
             return forecast;
         }
     }
+
+    // add favourite to favourite list and save to localStorage
+    const addFav = (location) => {
+        for (let i in favourites) {
+            if (favourites[i] === location) {
+                alert("You already saved this location!");
+                return; 
+            }
+        }
+        favourites = [...favourites, location];
+        localStorage.setItem("fav", JSON.stringify(favourites));
+    }
+
+    const deleteFav = (id) => {
+        favourites.splice(id, 1);
+        favourites = favourites;
+        localStorage.setItem("fav", JSON.stringify(favourites));
+    }
 </script>
 
 <body>
     <h1>Weatherwatch</h1>
 
-    <div class="unit" style="margin-bottom: .8rem;">
+    <div class="unit" style="margin-bottom: .6rem;">
         <Switch bind:value={unit} label="" design="multi" options={['Metric', 'Imperial']} fontSize={18}/>
     </div>
 
     <form>
         <input type="text" placeholder="Enter Location" bind:value={loc} on:input={getSuggestions} use:selectTextOnFocus>
         <button type="submit" on:click|preventDefault={() => {promise = getWeather()}}>Load</button>
+        <img class="favButton" src="star.svg" alt="star" title="favourites" on:click={() => {showFav = !showFav}}>
     </form>
 
     <div class="suggestions">
         {#each suggestions as suggestion}
-            <p on:click|preventDefault={() => {loc = suggestion.name; promise = getWeather()}}>{suggestion.name}</p>
+            <p on:click={() => {loc = suggestion.name; promise = getWeather()}}>{suggestion.name}</p>
         {/each}
     </div>
+
+    {#if showFav}
+        <div class="fav gradient">
+            <img class="favButton" src="star.svg" alt="star"  title="favourites">
+            {#each favourites as favourite, id}
+                <div class="favItem" style="display: flex; justify-content: center; margin-bottom: .25rem">
+                    <p style="text-decoration: underline;" on:click={() => {loc = favourite; promise = getWeather()}}>{favourite}</p>
+                    <button type="button" on:click={() => {deleteFav(id)}}>X</button>
+                </div>
+            {:else}
+                <p>No favourites, add one with the "+" in your Main card.</p>
+            {/each}
+        </div>
+    {/if}
 
     {#await promise}
         <p>Lade Wetter ...</p>
     {:then data} 
         <div class="cards" style="margin: 1rem;">
-            <MainCard data={data.current} symbol={getSymbol(data.current.condition.code)} {unit} location={data.location}></MainCard>
+            <MainCard data={data.current} symbol={getSymbol(data.current.condition.code)} {unit} location={data.location} on:click={() => {addFav(`${data.location.name}, ${data.location.region}`)}}></MainCard>
 
             <div class="forecastnav">
                 <p class:selected="{forecastType === 0}" on:click={() => {forecastType = 0}}>Today</p>
@@ -148,7 +192,7 @@
             <DailyAdvice {advice}></DailyAdvice>
         </div>
     {:catch error}
-        <p class="error" style="color: red; margin-top: .5rem">Error: Ort nicht vorhanden.</p>
+        <p class="error" style="color: red; margin-top: .5rem">Error: Could not load weather data. Please refresh!</p>
     {/await}
 </body>
 
@@ -158,18 +202,45 @@
         color: var(--accent);
     }
 
+    form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     input {
+        max-width: 200px;
+        width: 50%;
         border: none;
         border-radius: 1rem;
         font-size: 1rem;
         padding: .3rem .5rem;
     }
 
-    button {
+    button[type=submit] {
         border: none;
         font-size: 1rem;
         padding: .3rem .5rem;
         border-radius: 1rem;
+        margin: 0 .4rem;
+    }
+
+    .favButton {
+        width: 2rem;
+    }
+
+    .fav {
+        padding: .5rem .5rem;
+        margin: 0 1rem;
+        margin-top: 1rem;
+    }
+
+    .fav button {
+        border: none;
+        border-radius: 1rem;
+        background-color: red;
+        color: white;
+        margin-left: .2rem;
     }
 
     p {
