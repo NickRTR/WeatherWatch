@@ -114,20 +114,23 @@
         font-size: .8rem;
         color: lightgray;
         padding-bottom: 0;
+        margin-top: .5rem;
     }
 
     p {
         font-size: 1rem;
         margin: 0;
         padding: .5rem;
+        padding-bottom: 0;
     }
 
     button {
         border-radius: 1rem;
         background-color: greenyellow;
+        color: black;
         border: none;
-        margin-bottom: .5rem;
+        margin-top: .5rem;
+        margin-bottom: .7rem;
         padding: .25rem .5rem;
-        padding-bottom: .2rem;
     }
 </style>
