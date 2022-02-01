@@ -3,6 +3,13 @@
     export let symbol;
     export let unit;
     export let location;
+
+    let displayLocation = `${location.name}, ${location.region}, ${location.country}`
+    if (!location.region) {
+        displayLocation = `${location.name}, ${location.country}`;
+    } else if (location.region && !location.country) {
+        displayLocation = `${location.name}, ${location.region}`;
+    }
 </script>
 
 <div class="card gradient">
@@ -35,27 +42,26 @@
             <h3>{Math.round(data.temp_f)}<em>F</em></h3>
             <img src="/condition/{symbol}.svg" alt={symbol}>
         </div>
-        <div class="additional">
-            <div class="infos">
-                <div class="wind">
-                    <img src="/wind.svg" alt="">
-                    <p class="data">{Math.round(data.wind_mph)}mph</p>
-                    <p class="description">Wind</p>
-                </div>
-                <div class="feels">
-                    <img src="/feelslike.svg" alt="">
-                    <p class="data">{Math.round(data.feelslike_f)}F</p>
-                    <p class="description">Feels like</p>
-                </div>
-                <div class="humidty">
-                    <img src="/humidity.svg" alt="">
-                    <p class="data">{data.humidity}%</p>
-                    <p class="description">Humidty</p>
-                </div>
+        <p>Condition: {data.condition.text}</p>
+        <div class="infos">
+            <div class="wind">
+                <img src="/wind.svg" alt="">
+                <p class="data">{Math.round(data.wind_mph)}mph</p>
+                <p class="description">Wind</p>
+            </div>
+            <div class="feels">
+                <img src="/feelslike.svg" alt="">
+                <p class="data">{Math.round(data.feelslike_f)}F</p>
+                <p class="description">Feels like</p>
+            </div>
+            <div class="humidty">
+                <img src="/humidity.svg" alt="">
+                <p class="data">{data.humidity}%</p>
+                <p class="description">Humidty</p>
             </div>
         </div>
     {/if}
-    <p class="location">{location.name}, {location.region}, {location.country}</p>
+    <p class="location">{displayLocation}</p>
     <button type="button" on:click>Add location to favourites</button>
 </div>
 
@@ -129,8 +135,9 @@
         background-color: greenyellow;
         color: black;
         border: none;
-        margin-top: .5rem;
+        margin-top: .4rem;
         margin-bottom: .7rem;
         padding: .25rem .5rem;
+        cursor: pointer;
     }
 </style>

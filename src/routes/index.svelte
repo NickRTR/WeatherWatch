@@ -118,7 +118,8 @@
     }
 
     // add favourite to favourite list and save to localStorage
-    const addFav = (location) => {
+    const addFav = (name, region) => {
+        let location = region ? `${name}, ${region}` : name; // only display region if there
         for (let i in favourites) {
             if (favourites[i] === location) {
                 alert("You already saved this location!");
@@ -127,6 +128,7 @@
         }
         favourites = [...favourites, location];
         localStorage.setItem("fav", JSON.stringify(favourites));
+        showFav = true; 
     }
 
     const deleteFav = (id) => {
@@ -173,7 +175,7 @@
         <p>Lade Wetter ...</p>
     {:then data} 
         <div class="cards" style="margin: 1rem;">
-            <MainCard data={data.current} symbol={getSymbol(data.current.condition.code)} {unit} location={data.location} on:click={() => {addFav(`${data.location.name}, ${data.location.region}`)}}></MainCard>
+            <MainCard data={data.current} symbol={getSymbol(data.current.condition.code)} {unit} location={data.location} on:click={() => {addFav(data.location.name, data.location.region)}}></MainCard>
 
             <div class="forecastnav">
                 <p class:selected="{forecastType === 0}" on:click={() => {forecastType = 0}}>Today</p>
@@ -241,6 +243,7 @@
         background-color: red;
         color: white;
         margin-left: .2rem;
+        cursor: pointer;
     }
 
     p {
@@ -255,6 +258,7 @@
         cursor: pointer;
         text-decoration: underline;
     }
+
     .forecastnav {
         display: flex;
         text-align: left;
