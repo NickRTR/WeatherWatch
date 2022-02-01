@@ -7,15 +7,16 @@ Weather Watch is a weather report built in Sveltekit. It shows the current weath
 ## Functionality
 
 - Switch between Metric and Imperial units
+- Save your favourite locations
 - 7 different weather conditions
+- Hourly forecast for 3 days
 - Temperature
 - Wind speed
 - Felt temperature
 - Air Humidity
 - Sunrise and Sunset times
 - Uv Index and Air quality
-- Hourly forecast for 3 days
-- Random Advice like: "Don't eat anything your grandparents wouldn't recognise as food."
+- Daily advice, for example: "Don't eat anything your grandparents wouldn't recognise as food."
 
 ---
 
