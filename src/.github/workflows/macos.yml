@@ -1,19 +1,19 @@
-name: Build and release tauri app windows
+name: Build and release tauri app macos
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   tauri-build:
     name: Build and release tauri app
-    runs-on: windows-latest
+    runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
-        with:
+        with: 
           node-version: 16.x
       - uses: actions-rs/toolchain@v1
         with:
@@ -24,9 +24,9 @@ jobs:
       - uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          automatic_release_tag: windows-release
+          automatic_release_tag: macos-release
           prerelease: false
           title: "Development Build"
           files: |
-            src-tauri/target/release/weatherwatch.exe
-            src-tauri/target/release/bundle/msi/weatherwatch_0.1.0_x64.msi
+            src-tauri/target/release/bundle/macos/weatherwatch.app
+            src-tauri/target/release/bundle/dmg/weatherwatch_0.1.0_x64.dmg
