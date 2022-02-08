@@ -255,6 +255,4 @@
         box-shadow: 0 0px 8px var(--accent-color);
         border-radius: 1.5em;
     }
-   
-
 </style>
