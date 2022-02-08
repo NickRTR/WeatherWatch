@@ -1,15 +1,19 @@
 {
     "name": "weatherwatch",
     "version": "0.0.1",
+    "author": "NickRTR <nickrtrrtr@gmail.com>",
+    "description": "Weather Watch is a weather report built in Sveltekit.",
     "scripts": {
         "dev": "svelte-kit dev",
         "build": "svelte-kit build",
         "package": "svelte-kit package",
         "preview": "svelte-kit preview",
-        "tauri": "tauri"
+        "tauri": "tauri",
+        "tauri:package": "npm run build && tauri build"
     },
     "devDependencies": {
-        "@sveltejs/adapter-auto": "next",
+        "@sveltejs/adapter-node": "next",
+        "@sveltejs/adapter-static": "next",
         "@sveltejs/kit": "next",
         "@tauri-apps/cli": "^1.0.0-beta.10",
         "svelte": "^3.44.0"
