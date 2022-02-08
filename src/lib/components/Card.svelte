@@ -10,7 +10,7 @@
     {#if unit === "Metric"}
         <h3>{Math.round(forecastData.temp_c)}<em>°C</em></h3>
     {:else}
-        <h3>{Math.round(forecastData.temp_f)}<em>F</em></h3>
+        <h3>{Math.round(forecastData.temp_f)}<em>°F</em></h3>
     {/if}
 </div>
 
