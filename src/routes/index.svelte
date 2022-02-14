@@ -1,6 +1,15 @@
 <script context="module">
 	export async function load() {
-		const res = await fetch("https://api.adviceslip.com/advice");
+        let res;
+        try {
+		    res = await fetch("https://api.adviceslip.com/advice"); 
+        } catch (error) {
+            return {
+                props: {
+                    advice: "No internet connection!"
+                }
+            }
+        }
 		const data = await res.json();
 
 		return {
