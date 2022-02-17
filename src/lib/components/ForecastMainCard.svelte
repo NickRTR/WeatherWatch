@@ -2,18 +2,14 @@
     export let data;
     export let symbol;
     export let unit;
-    export let location;
-
-    let displayLocation = `${location.name}, ${location.region}, ${location.country}`
-    if (!location.region) {
-        displayLocation = `${location.name}, ${location.country}`;
-    } else if (location.region && !location.country) {
-        displayLocation = `${location.name}, ${location.region}`;
-    }
+    export let time;
 </script>
 
 <div class="card gradient">
-    <h2>Today</h2>
+    <div class="title">
+        <h2>{time}</h2>
+        <p on:click>X</p>
+    </div>
     {#if unit === "Metric"}
         <div class="weather">
             <h3>{Math.round(data.temp_c)}<em>°C</em></h3>
@@ -62,12 +58,25 @@
         </div>
     {/if}
 </div>
-<p class="location">{displayLocation}</p>
-<button type="button" on:click>Add location to favourites</button>
 
 <style>
     .card {
-        padding-bottom: .5rem;
+        margin-bottom: 1rem;
+    }
+
+    .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .title p {
+        border-radius: 100%;
+        margin-right: 1rem;
+        font-weight: bolder;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: var(--accent);
     }
 
     h2 {
@@ -132,15 +141,5 @@
         margin: 0;
         padding: .5rem;
         padding-bottom: 0;
-    }
-
-    button {
-        border-radius: 1rem;
-        background-color: greenyellow;
-        color: black;
-        border: none;
-        margin-top: .4rem;
-        padding: .25rem .5rem;
-        cursor: pointer;
     }
 </style>

@@ -24,6 +24,7 @@
     // components
     import Switch from '$lib/components/Switch.svelte';
     import MainCard from "$lib/components/MainCard.svelte";
+    import ForecastMainCard from "$lib/components/forecastMainCard.svelte";
     import Card from "$lib/components/Card.svelte";
     import Astro from "$lib/components/Astro.svelte";
     import Air from '$lib/components/Air.svelte';
@@ -31,9 +32,10 @@
     // import View from '$lib/components/View.svelte';
 
     // tools
-    import {conditions} from "$lib/conditions.js";
-    import {browser} from "$app/env";
-    import {selectTextOnFocus} from "$lib/selectText.js";
+    import { conditions } from "$lib/conditions.js";
+    import { browser } from "$app/env";
+    import { selectTextOnFocus } from "$lib/selectText.js";
+    import { slide } from "svelte/transition";
     
     // export variables
     export let advice;
@@ -110,6 +112,14 @@
         }
         // return code;
     }
+
+    // forecast
+    let showForeCastMainCard = false;
+
+    let forecastDetails = {
+        data: "",
+        time: ""
+    };
 
     // get correct forecast for specific day
     const getForecast = (result, day) => {
@@ -193,9 +203,15 @@
             </div>
             <div class="forecast">
                 {#each getForecast(data, forecastType) as forecastData}
-                    <Card {forecastData} {unit} symbol={getSymbol(forecastData.condition.code)}></Card>
+                    <Card {forecastData} {unit} symbol={getSymbol(forecastData.condition.code)} on:click={() => {forecastDetails.data = forecastData; forecastDetails.time = forecastData.time; showForeCastMainCard = !showForeCastMainCard}}></Card>
                 {/each}
             </div>
+
+            {#if showForeCastMainCard}
+                <div class="forecastMainCard" transition:slide>
+                    <ForecastMainCard time={forecastDetails.time} data={forecastDetails.data} symbol={getSymbol(forecastDetails.data.condition.code)} {unit} on:click={() => {showForeCastMainCard = false}} />
+                </div>
+            {/if}
 
             <Astro {data}></Astro>
             <Air uv={data.current.uv} quality={data.current.air_quality["us-epa-index"]}></Air>
