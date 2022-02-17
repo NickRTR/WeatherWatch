@@ -10,6 +10,7 @@ Weather Watch is a weather report built in Sveltekit. It shows the current weath
 - Save your favourite locations
 - 7 different weather conditions
 - Hourly forecast for 3 days
+- Click on hourly forecast opens detailed view
 - Temperature
 - Wind speed
 - Felt temperature
