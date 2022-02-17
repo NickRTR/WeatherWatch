@@ -62,6 +62,7 @@
 <style>
     .card {
         margin-bottom: 1rem;
+        padding-bottom: .5rem;
     }
 
     .title {
