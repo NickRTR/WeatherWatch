@@ -203,7 +203,7 @@
             </div>
             <div class="forecast">
                 {#each getForecast(data, forecastType) as forecastData}
-                    <Card {forecastData} {unit} symbol={getSymbol(forecastData.condition.code)} on:click={() => {forecastDetails.data = forecastData; forecastDetails.time = forecastData.time; showForeCastMainCard = !showForeCastMainCard}}></Card>
+                    <Card {forecastData} {unit} symbol={getSymbol(forecastData.condition.code)} on:click={() => {forecastDetails.data = forecastData; forecastDetails.time = forecastData.time; showForeCastMainCard = true}}></Card>
                 {/each}
             </div>
 
