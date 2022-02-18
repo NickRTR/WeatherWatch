@@ -9,6 +9,7 @@
 <style>
 	* {
         font-family: 'Signika', sans-serif;
+        font-display: swap;
         background-color: #1E1E31;
         text-align: center;
         color: white;
