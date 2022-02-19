@@ -181,7 +181,7 @@
             <img class="favButton" src="star.svg" alt="star"  title="favourites">
             {#each favourites as favourite, id}
                 <div class="favItem" style="display: flex; justify-content: center; margin-bottom: .25rem">
-                    <p style="text-decoration: underline;" on:click={() => {loc = favourite; promise = getWeather()}}>{favourite}</p>
+                    <p style="text-decoration: underline; cursor: pointer;" on:click={() => {loc = favourite; promise = getWeather()}}>{favourite}</p>
                     <button type="button" on:click={() => {deleteFav(id)}}>X</button>
                 </div>
             {:else}
