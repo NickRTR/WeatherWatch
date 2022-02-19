@@ -12,7 +12,7 @@
   "tauri": {
     "bundle": {
       "active": true,
-      "targets": "all",
+      "targets": ["msi", "deb", "dmg"],
       "identifier": "app.vercel.weatherwatch",
       "icon": [
         "icons/32x32.png",
