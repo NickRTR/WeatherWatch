@@ -177,7 +177,7 @@
     </div>
 
     {#if showFav}
-        <div class="fav gradient">
+        <div class="fav gradient" transition:slide>
             <img class="favButton" src="star.svg" alt="star"  title="favourites">
             {#each favourites as favourite, id}
                 <div class="favItem" style="display: flex; justify-content: center; margin-bottom: .25rem">
