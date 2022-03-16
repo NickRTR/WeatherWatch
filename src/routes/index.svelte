@@ -160,7 +160,7 @@
 <body>
     <h1>Weatherwatch</h1>
 
-    <div class="unit" style="margin-bottom: .6rem;">
+    <div class="unit backgroundFont" style="margin-bottom: .6rem;">
         <Switch bind:value={unit} label="" design="multi" options={['Metric', 'Imperial']} fontSize={18}/>
     </div>
 
@@ -178,7 +178,7 @@
 
     {#if showFav}
         <div class="fav gradient" transition:slide>
-            <img class="favButton" src="star.svg" alt="star"  title="favourites">
+            <img class="favButton" src="star.svg" alt="star" title="favourites">
             {#each favourites as favourite, id}
                 <div class="favItem" style="display: flex; justify-content: center; margin-bottom: .25rem">
                     <p style="text-decoration: underline; cursor: pointer;" on:click={() => {loc = favourite; promise = getWeather()}}>{favourite}</p>
@@ -197,9 +197,9 @@
             <MainCard data={data.current} symbol={getSymbol(data.current.condition.code)} {unit} location={data.location} on:click={() => {addFav(data.location.name, data.location.region)}}></MainCard>
 
             <div class="forecastnav">
-                <p class:selected="{forecastType === 0}" on:click={() => {forecastType = 0}}>Today</p>
-                <p class:selected="{forecastType === 1}" on:click={() => {forecastType = 1}}>Tomorrow</p>
-                <p class:selected="{forecastType === 2}" on:click={() => {forecastType = 2}}>Overmorrow</p>
+                <p class="backgroundFont" class:selected="{forecastType === 0}" on:click={() => {forecastType = 0}}>Today</p>
+                <p class="backgroundFont" class:selected="{forecastType === 1}" on:click={() => {forecastType = 1}}>Tomorrow</p>
+                <p class="backgroundFont" class:selected="{forecastType === 2}" on:click={() => {forecastType = 2}}>Overmorrow</p>
             </div>
             <div class="forecast">
                 {#each getForecast(data, forecastType) as forecastData}
@@ -265,8 +265,8 @@
     .fav button {
         border: none;
         border-radius: 1rem;
-        background-color: red;
-        color: white;
+        background-color: var(--accent);
+        color: var(--font);
         margin-left: .2rem;
         cursor: pointer;
     }

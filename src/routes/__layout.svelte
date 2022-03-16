@@ -10,9 +10,9 @@
 	* {
         font-family: 'Signika', sans-serif;
         font-display: swap;
-        background-color: #1E1E31;
+        background-color: var(--background);
         text-align: center;
-        color: white;
+        color: var(--font);
     }
 
     body {
@@ -21,11 +21,28 @@
     }
 
     :global(.gradient) {
-        background: linear-gradient(0deg, rgba(0,0,0,0.3) 10%, rgba(47,47,71,1) 100%);
+        background: var(--cardBackground);
+        box-shadow: 3px 3px 4px var(--accent);
         border-radius: 1rem;
+    }
+
+    :global(.backgroundFont) {
+        color: var(--backgroundFont);
     }
     
     :global(:root) {
+        /* bright */
         --accent: red;
+        --font: black;
+        --backgroundFont: white;
+        --background: #1E1E31;
+        --cardBackground: rgba(255, 255, 255, .9);
+
+        /* dark */
+        /* --accent: red;
+        --font: white;
+        --backgroundFont: white;
+        --background: #1E1E31;
+        --cardBackground: linear-gradient(0deg, rgba(0,0,0,0.3) 10%, rgba(47,47,71,1) 100%);  */
     }
 </style>

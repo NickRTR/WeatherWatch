@@ -122,7 +122,6 @@
 
     .description {
         font-size: .8rem;
-        color: lightgray;
         padding-bottom: 0;
         margin-top: .5rem;
     }
@@ -132,6 +131,10 @@
         margin: 0;
         padding: .5rem;
         padding-bottom: 0;
+    }
+
+    .location {
+        color: var(--backgroundFont);
     }
 
     button {
