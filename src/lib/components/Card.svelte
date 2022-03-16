@@ -17,7 +17,7 @@
 <style>
     .card {
         margin-right: .5rem;
-        margin-bottom: .55rem;
+        margin-bottom: .8rem;
         cursor: pointer;
     }
 

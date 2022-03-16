@@ -111,7 +111,6 @@
                 return condition;
             }
         }
-        // return code;
     }
 
     // forecast
@@ -183,7 +182,7 @@
 
     <div class="suggestions">
         {#each suggestions as suggestion}
-            <p on:click={() => {loc = suggestion.name; promise = getWeather()}}>{suggestion.name}</p>
+            <p class="backgroundFont" on:click={() => {loc = suggestion.name; promise = getWeather()}}>{suggestion.name}</p>
         {/each}
     </div>
 
