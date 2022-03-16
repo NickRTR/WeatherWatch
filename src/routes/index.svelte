@@ -36,6 +36,7 @@
     import { browser } from "$app/env";
     import { selectTextOnFocus } from "$lib/selectText.js";
     import { slide } from "svelte/transition";
+    import { theme } from "$lib/stores";
     
     // export variables
     export let advice;
@@ -155,10 +156,20 @@
         favourites = favourites;
         localStorage.setItem("fav", JSON.stringify(favourites));
     }
+
+    const changeTheme = () => {
+        if ($theme === "light") {
+            theme.set("dark");
+        } else {
+            theme.set("light");
+        }
+        localStorage.setItem("theme", $theme);
+        console.log($theme);
+    }
 </script>
 
 <body>
-    <h1>Weatherwatch</h1>
+    <h1 on:click={changeTheme}>Weatherwatch</h1>
 
     <div class="unit backgroundFont" style="margin-bottom: .6rem;">
         <Switch bind:value={unit} label="" design="multi" options={['Metric', 'Imperial']} fontSize={18}/>
@@ -227,6 +238,7 @@
     h1 {
         margin: .8rem 0;
         color: var(--accent);
+        cursor: pointer;
     }
 
     form {
