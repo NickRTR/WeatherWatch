@@ -187,7 +187,7 @@
 
     {#if showFav}
         <div class="fav gradient" transition:slide>
-            <img class="favButton" src="star.svg" alt="star" title="favourites">
+            <img class="favButton" src="/ui/star.svg" alt="Favourites:" title="favourites">
             {#each favourites as favourite, id}
                 <div class="favItem" style="display: flex; justify-content: center; margin-bottom: .25rem">
                     <p style="text-decoration: underline; cursor: pointer;" on:click={() => {loc = favourite; promise = getWeather()}}>{favourite}</p>
