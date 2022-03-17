@@ -163,7 +163,6 @@
             theme.set("light");
         }
         localStorage.setItem("theme", $theme);
-        console.log($theme);
     }
 </script>
 
