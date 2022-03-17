@@ -7,7 +7,7 @@
         <img src="/ui/sunrise.svg" alt="sunrise">
         <p>{data.forecast.forecastday[0].astro.sunrise}</p>
     </div>
-    <img style="width: 8rem;" src="sun.svg" alt="">
+    <img style="width: 8rem;" src="/ui/sun.svg" alt="">
     <div class="sunset">
         <img src="/ui/sunset.svg" alt="sunset">
         <p>{data.forecast.forecastday[0].astro.sunset}</p>

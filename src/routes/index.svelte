@@ -201,7 +201,7 @@
     {/if}
 
     {#await promise}
-        <p>Lade Wetter ...</p>
+        <p class="backgroundFont">Lade Wetter ...</p>
     {:then data} 
         <div class="cards" style="margin: 1rem;">
             <MainCard data={data.current} symbol={getSymbol(data.current.condition.code)} {unit} location={data.location} on:click={() => {addFav(data.location.name, data.location.region)}}></MainCard>
