@@ -7,19 +7,13 @@
         "dev": "svelte-kit dev",
         "build": "svelte-kit build",
         "package": "svelte-kit package",
-        "preview": "svelte-kit preview",
-        "tauri": "tauri",
-        "tauri:package": "npm run build && tauri build"
+        "preview": "svelte-kit preview"
     },
     "devDependencies": {
         "@sveltejs/adapter-node": "next",
         "@sveltejs/adapter-static": "next",
         "@sveltejs/kit": "next",
-        "@tauri-apps/cli": "^1.0.0-beta.10",
         "svelte": "^3.44.0"
     },
-    "type": "module",
-    "dependencies": {
-        "@tauri-apps/api": "^1.0.0-beta.8"
-    }
+    "type": "module"
 }
