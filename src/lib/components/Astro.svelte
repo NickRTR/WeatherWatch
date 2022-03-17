@@ -4,12 +4,12 @@
 
 <div class="astro gradient">
     <div class="sunrise">
-        <img src="/sunrise.svg" alt="sunrise">
+        <img src="/ui/sunrise.svg" alt="sunrise">
         <p>{data.forecast.forecastday[0].astro.sunrise}</p>
     </div>
     <img style="width: 8rem;" src="sun.svg" alt="">
     <div class="sunset">
-        <img src="/sunset.svg" alt="sunset">
+        <img src="/ui/sunset.svg" alt="sunset">
         <p>{data.forecast.forecastday[0].astro.sunset}</p>
     </div>
 </div>

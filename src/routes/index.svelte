@@ -177,7 +177,7 @@
     <form>
         <input type="text" placeholder="Enter Location" bind:value={loc} on:input={getSuggestions} use:selectTextOnFocus>
         <button type="submit" on:click|preventDefault={() => {promise = getWeather()}}>Load</button>
-        <img class="favButton" src="star.svg" alt="star" title="favourites" on:click={() => {showFav = !showFav}}>
+        <img class="favButton" src="/ui/star.svg" alt="star" title="favourites" on:click={() => {showFav = !showFav}}>
     </form>
 
     <div class="suggestions">

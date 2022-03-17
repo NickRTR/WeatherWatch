@@ -18,17 +18,17 @@
         <p>Condition: {data.condition.text}</p>
         <div class="infos">
             <div class="wind">
-                <img src="/wind.svg" alt="">
+                <img src="/ui/wind.svg" alt="">
                 <p class="data">{Math.round(data.wind_kph)}km/h</p>
                 <p class="description">Wind</p>
             </div>
             <div class="feels">
-                <img src="/feelslike.svg" alt="">
+                <img src="/ui/feelslike.svg" alt="">
                 <p class="data">{Math.round(data.feelslike_c)}°C</p>
                 <p class="description">Feels like</p>
             </div>
             <div class="humidty">
-                <img src="/humidity.svg" alt="">
+                <img src="/ui/humidity.svg" alt="">
                 <p class="data">{data.humidity}%</p>
                 <p class="description">Humidity</p>
             </div>
@@ -41,17 +41,17 @@
         <p>Condition: {data.condition.text}</p>
         <div class="infos">
             <div class="wind">
-                <img src="/wind.svg" alt="">
+                <img src="/ui/wind.svg" alt="">
                 <p class="data">{Math.round(data.wind_mph)}mph</p>
                 <p class="description">Wind</p>
             </div>
             <div class="feels">
-                <img src="/feelslike.svg" alt="">
+                <img src="/ui/feelslike.svg" alt="">
                 <p class="data">{Math.round(data.feelslike_f)}F</p>
                 <p class="description">Feels like</p>
             </div>
             <div class="humidty">
-                <img src="/humidity.svg" alt="">
+                <img src="/ui/humidity.svg" alt="">
                 <p class="data">{data.humidity}%</p>
                 <p class="description">Humidty</p>
             </div>
@@ -132,7 +132,6 @@
 
     .description {
         font-size: .8rem;
-        color: lightgray;
         padding-bottom: 0;
         margin-top: .5rem;
     }

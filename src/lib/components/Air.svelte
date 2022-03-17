@@ -41,12 +41,12 @@
 
 <div class="air gradient">
     <div class="sunrise">
-        <img src="/uv.svg" alt="uv">
+        <img src="/ui/uv.svg" alt="uv">
         <p>UV index: {uv}</p>
         <p style="margin-top: -.5rem;">Burn time: {burntime} <em>Minutes</em></p>
     </div>
     <div class="sunset">
-        <img src="/air.svg" alt="air quality">
+        <img src="/ui/air.svg" alt="air quality">
         <p>Air quality: {quality}</p>
     </div>
 </div>

@@ -12,7 +12,7 @@
 </script>
 
 <div class="air gradient">
-    <img src="view.svg" alt="View Distance">
+    <img src="/ui/view.svg" alt="View Distance">
     <div>
         <p>Visibility:</p>
         <h3>{Math.round(data.vis_km)}<em>km</em></h3>
