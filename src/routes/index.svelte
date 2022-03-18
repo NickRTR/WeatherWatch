@@ -156,7 +156,8 @@
         localStorage.setItem("fav", JSON.stringify(favourites));
     }
 
-    const changeTheme = () => {
+    const changeTheme = (thtme) => {
+        console.log();
         if ($theme === "light") {
             theme.set("dark");
         } else {
@@ -167,7 +168,19 @@
 </script>
 
 <body>
-    <h1 on:click={changeTheme}>Weatherwatch</h1>
+    <header>
+        <h1 on:click={changeTheme}>Weatherwatch</h1>
+        <div class="toggleAppeareance">
+            <input type="checkbox" name="toggleAppeareance" id="toggleAppeareance" on:change={changeTheme} checked={$theme === "light" ? true : false}>
+            <label for="toggleAppeareance">
+                {#if $theme === "light"}
+                    <p class="light">🌞</p>
+                {:else if $theme === "dark"}
+                    <p class="dark">🌙</p>
+                {/if}
+            </label>
+        </div>
+    </header>
 
     <div class="unit backgroundFont" style="margin-bottom: .6rem;">
         <Switch bind:value={unit} label="" design="multi" options={['Metric', 'Imperial']} fontSize={18}/>
@@ -233,11 +246,36 @@
 </body>
 
 <style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        margin: 0 1rem;
+        align-items: center;
+    }
+
     h1 {
         margin: .8rem 0;
         color: var(--accent);
         cursor: pointer;
     }
+
+    .toggleAppeareance input {
+        display: none;
+    }
+
+    .toggleAppeareance p {
+        background-color: var(--color);
+        border-radius: 100%;
+        font-size: 1.5rem;
+        padding: .5rem;
+        box-shadow: 0 0 5px 4px var(--accent);
+        user-select: none;
+        cursor: pointer;
+    }
+
+    /* .toggleAppeareance img {
+        height: 100%;
+    } */
 
     form {
         display: flex;

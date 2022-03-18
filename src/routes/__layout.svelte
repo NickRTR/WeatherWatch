@@ -34,6 +34,7 @@
 
         --accent: red;
         --font: black;
+        --color: white;
         --backgroundFont: white;
         --cardBackground: rgba(255, 255, 255, .9);
     }
@@ -55,7 +56,7 @@
     :global(body .dark) {
         --accent: red;
         --font: white;
-        --backgroundFont: white;
+        --color: black;
         --cardBackground: linear-gradient(0deg, rgba(0,0,0,0.3) 10%, rgba(47,47,71,1) 100%); 
     }
 </style>
