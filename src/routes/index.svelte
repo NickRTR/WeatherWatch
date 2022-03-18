@@ -267,10 +267,12 @@
         background-color: var(--color);
         border-radius: 100%;
         font-size: 1.8rem;
-        padding: .3rem;
+        padding: .5rem;
         box-shadow: 0 0 5px 4px var(--accent);
         user-select: none;
         cursor: pointer;
+        width: 40px;
+        height: 40px;
     }
 
     form {
