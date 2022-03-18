@@ -266,16 +266,12 @@
     .toggleAppeareance p {
         background-color: var(--color);
         border-radius: 100%;
-        font-size: 1.5rem;
-        padding: .5rem;
+        font-size: 1.8rem;
+        padding: .3rem;
         box-shadow: 0 0 5px 4px var(--accent);
         user-select: none;
         cursor: pointer;
     }
-
-    /* .toggleAppeareance img {
-        height: 100%;
-    } */
 
     form {
         display: flex;
