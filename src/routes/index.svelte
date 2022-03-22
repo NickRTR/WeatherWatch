@@ -108,6 +108,19 @@
     const getSymbol = (code) => {
         for (const condition in conditions) {
             if (conditions[condition].includes(code)) {
+                let hours = new Date().getHours();
+                if (hours > 19 || hours < 7) { // return available night icons if it's night
+                    switch (condition) {
+                        case "sun":
+                            return "night sun"
+                        case "partly cloudy":
+                            return "night partly cloudy"
+                        case "cloudy":
+                            return "night cloudy"
+                        default:
+                            return condition;
+                    }
+                }
                 return condition;
             }
         }
@@ -121,9 +134,13 @@
         time: ""
     };
 
+    function getCurrentTime(result) {
+        return result.location.localtime.substr(11, 2).replace(":", ""); // filter only hour from time and replace : for one digit times like 6:40
+    }
+
     // get correct forecast for specific day
     const getForecast = (result, day) => {
-        let now = result.location.localtime.substr(11, 2).replace(":", ""); // filter only hour from time and replace : for one digit times like 6:40
+        let now = getCurrentTime(result);
         let forecast = result.forecast.forecastday[day].hour; // weather report per hour
         let forecastArray = [];
         if (day === 0) {

@@ -31,6 +31,9 @@ Weather Watch is a weather report built in Sveltekit. It shows the current weath
     <img src="./static/condition/rain.svg" width=100>
     <img src="./static/condition/snow.svg" width=100>
     <img src="./static/condition/thunder.svg" width=100>
+    <img src="./static/condition/night sun.svg" width=100>
+    <img src="./static/condition/night partly cloudy.svg" width=100>
+    <img src="./static/condition/night cloudy.svg" width=100>
 </p>
 
 Icons from https://www.reshot.com/
