@@ -41,12 +41,6 @@
     // export variables
     export let advice;
 
-    let API_KEY = import.meta.env.VITE_API_KEY;
-    // if production, get KEY from Vercel
-    if (process.env.NODE_ENV === 'production') {
-        API_KEY = process.env.API_KEY;
-    }
-
     // variables
     let loc = browser ? localStorage.getItem("location") : "New York"; // get/save location name from/to localStorage
     let forecastType = 0;
@@ -77,7 +71,7 @@
         if (loc.match(/^ *$/) !== null) {
             return;
         }
-        const res = await fetch(`https://api.weatherapi.com/v1/search.json?key=${API_KEY}&q=${loc}`);
+        const res = await fetch(`/api/suggestion/${loc}.json`);
         if (res.ok) {
             const result = await res.json();
   		    suggestions = result;
@@ -93,7 +87,7 @@
         suggestions = []; 
         showFav = false;
         loc = (loc === null) ? "New York" : loc;
-        const res = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${loc}&days=3&aqi=yes`);
+        let res = await fetch(`/api/${loc}.json`);
         if (res.ok) {
             const result = await res.json();
             loc = result.location.name;
