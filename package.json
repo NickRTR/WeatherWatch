@@ -10,13 +10,9 @@
         "preview": "svelte-kit preview"
     },
     "devDependencies": {
-        "@sveltejs/adapter-node": "next",
         "@sveltejs/adapter-static": "next",
         "@sveltejs/kit": "next",
         "svelte": "^3.44.0"
     },
-    "type": "module",
-    "dependencies": {
-        "dotenv": "^16.0.0"
-    }
+    "type": "module"
 }
