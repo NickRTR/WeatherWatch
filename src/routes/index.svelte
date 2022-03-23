@@ -247,7 +247,7 @@
 
             {#if showForeCastMainCard}
                 <div class="forecastMainCard" transition:slide>
-                    <ForecastMainCard time={forecastDetails.time} data={forecastDetails.data} symbol={getSymbol(forecastDetails.data.condition.code, getHoursFromTime(forecastDetails.time))} {unit} on:click={() => {showForeCastMainCard = false}} />
+                    <ForecastMainCard time={forecastDetails.time} data={forecastDetails.data} symbol={getSymbol(forecastDetails.data.condition.code, getHoursFromDate(forecastDetails.time))} {unit} on:click={() => {showForeCastMainCard = false}} />
                 </div>
             {/if}
 
