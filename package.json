@@ -15,5 +15,8 @@
         "@sveltejs/kit": "next",
         "svelte": "^3.44.0"
     },
-    "type": "module"
+    "type": "module",
+    "dependencies": {
+        "dotenv": "^16.0.0"
+    }
 }
