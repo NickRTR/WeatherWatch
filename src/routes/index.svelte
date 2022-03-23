@@ -41,14 +41,6 @@
     // export variables
     export let advice;
 
-    let API_KEY = import.meta.env.VITE_API_KEY;
-    // if production, get KEY from Vercel
-    if (process.env.NODE_ENV === "production") {
-        API_KEY = process.env.API_KEY;
-    }
-    
-    console.log("🚀 ~ file: index.svelte ~ line 45 ~ API_KEY", API_KEY)
-
     // variables
     let loc = browser ? localStorage.getItem("location") : "New York"; // get/save location name from/to localStorage
     let forecastType = 0;
@@ -96,7 +88,7 @@
         suggestions = []; 
         showFav = false;
         loc = (loc === null) ? "New York" : loc;
-        let res = await fetch(`/api/${loc}.json`);
+        let res = await fetch(`/${loc}.json`);
         if (res.ok) {
             const result = await res.json();
             loc = result.location.name;
