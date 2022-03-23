@@ -1,4 +1,9 @@
-import { API_KEY } from "$lib/api";
+// import { API_KEY } from "$lib/api";
+
+import dotenv from 'dotenv'
+dotenv.config()
+
+const API_KEY = process.env.API_KEY;
 
 export async function get({ params }) {
     const result = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${params.search}&days=3&aqi=yes`);
