@@ -1,8 +1,4 @@
-let API_KEY = import.meta.env.VITE_API_KEY;
-// if production, get KEY from Vercel
-if (process.env.NODE_ENV === "production") {
-    API_KEY = process.env.API_KEY;
-}
+import { API_KEY } from "$lib/api";
 
 export async function get({ params }) {
     const result = await fetch(`https://api.weatherapi.com/v1/search.json?key=${API_KEY}&q=${params.location}`);
