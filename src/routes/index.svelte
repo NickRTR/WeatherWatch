@@ -88,7 +88,7 @@
         suggestions = []; 
         showFav = false;
         loc = (loc === null) ? "New York" : loc;
-        let res = await fetch(`/${loc}.json`);
+        let res = await fetch(`/api/${loc}.json`);
         if (res.ok) {
             const result = await res.json();
             loc = result.location.name;
