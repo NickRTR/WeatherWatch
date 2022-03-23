@@ -44,6 +44,7 @@
     // variables
     let loc = browser ? localStorage.getItem("location") : "New York"; // get/save location name from/to localStorage
     let forecastType = 0;
+    let astro;
 
     // get/set preffered unit from/to localStorage
     let unit = browser ? localStorage.getItem("unit") : "Metric";
@@ -91,6 +92,7 @@
         if (res.ok) {
             const result = await res.json();
             loc = result.location.name;
+            astro = result.forecast.forecastday[0].astro;
             localStorage.setItem("location", `${result.location.name} ${result.location.region}`);
   		    return result;
 		} else {
@@ -99,11 +101,10 @@
     }
 
     // go through all possible conditions and get the fitting according to the weather code
-    const getSymbol = (code) => {
+    const getSymbol = (code, hours) => {
         for (const condition in conditions) {
             if (conditions[condition].includes(code)) {
-                let hours = new Date().getHours();
-                if (hours > 19 || hours < 7) { // return available night icons if it's night
+                if (hours < parseInt(getHoursFromTime(astro.sunrise)) || hours > parseInt(getHoursFromTime(astro.sunset)) + 12) { // return available night icons if it's night
                     switch (condition) {
                         case "sun":
                             return "night sun"
@@ -128,13 +129,17 @@
         time: ""
     };
 
-    function getCurrentTime(result) {
-        return result.location.localtime.substr(11, 2).replace(":", ""); // filter only hour from time and replace : for one digit times like 6:40
+    function getHoursFromDate(time) {    
+        return time.substr(11, 2).replace(":", ""); // filter only hour from time and replace : for one digit times like 6:40
+    }
+
+    function getHoursFromTime(time) { 
+        return time.substr(0, 2).replace("0", ""); // filter only hour from time and replace : for one digit times like 6:40
     }
 
     // get correct forecast for specific day
     const getForecast = (result, day) => {
-        let now = getCurrentTime(result);
+        let now = getHoursFromDate(result.location.localtime);
         let forecast = result.forecast.forecastday[day].hour; // weather report per hour
         let forecastArray = [];
         if (day === 0) {
@@ -167,7 +172,7 @@
         localStorage.setItem("fav", JSON.stringify(favourites));
     }
 
-    const changeTheme = (thtme) => {
+    const changeTheme = () => {
         console.log();
         if ($theme === "light") {
             theme.set("dark");
@@ -227,7 +232,7 @@
         <p class="backgroundFont">Lade Wetter ...</p>
     {:then data} 
         <div class="cards" style="margin: 1rem;">
-            <MainCard data={data.current} symbol={getSymbol(data.current.condition.code)} {unit} location={data.location} on:click={() => {addFav(data.location.name, data.location.region)}}></MainCard>
+            <MainCard data={data.current} symbol={getSymbol(data.current.condition.code, new Date().getHours())} {unit} location={data.location} on:click={() => {addFav(data.location.name, data.location.region)}}></MainCard>
 
             <div class="forecastnav">
                 <p class="backgroundFont" class:selected="{forecastType === 0}" on:click={() => {forecastType = 0}}>Today</p>
@@ -236,17 +241,17 @@
             </div>
             <div class="forecast">
                 {#each getForecast(data, forecastType) as forecastData}
-                    <Card {forecastData} {unit} symbol={getSymbol(forecastData.condition.code)} on:click={() => {forecastDetails.data = forecastData; forecastDetails.time = forecastData.time; showForeCastMainCard = true}}></Card>
+                    <Card {forecastData} {unit} symbol={getSymbol(forecastData.condition.code, getHoursFromDate(forecastData.time))} on:click={() => {forecastDetails.data = forecastData; forecastDetails.time = forecastData.time; showForeCastMainCard = true}}></Card>
                 {/each}
             </div>
 
             {#if showForeCastMainCard}
                 <div class="forecastMainCard" transition:slide>
-                    <ForecastMainCard time={forecastDetails.time} data={forecastDetails.data} symbol={getSymbol(forecastDetails.data.condition.code)} {unit} on:click={() => {showForeCastMainCard = false}} />
+                    <ForecastMainCard time={forecastDetails.time} data={forecastDetails.data} symbol={getSymbol(forecastDetails.data.condition.code, getHoursFromTime(forecastDetails.time))} {unit} on:click={() => {showForeCastMainCard = false}} />
                 </div>
             {/if}
 
-            <Astro {data}></Astro>
+            <Astro {astro}></Astro>
             <Air uv={data.current.uv} quality={data.current.air_quality["us-epa-index"]}></Air>
             <!-- <View {unit} data={data.current}></View> -->
             <DailyAdvice {advice}></DailyAdvice>
