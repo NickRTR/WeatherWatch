@@ -4,6 +4,8 @@
     export let unit;
     export let location;
 
+    import { getTimeFromDate } from "$lib/time";
+
     let displayLocation = `${location.name}, ${location.region}, ${location.country}`
     if (!location.region) {
         displayLocation = `${location.name}, ${location.country}`;
@@ -13,7 +15,7 @@
 </script>
 
 <div class="card gradient">
-    <h2>Today</h2>
+    <h2>Today {getTimeFromDate(location.localtime)}</h2>
     {#if unit === "Metric"}
         <div class="weather">
             <h3>{Math.round(data.temp_c)}<em>°C</em></h3>

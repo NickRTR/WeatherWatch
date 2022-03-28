@@ -37,6 +37,7 @@
     import { selectTextOnFocus } from "$lib/selectText.js";
     import { slide } from "svelte/transition";
     import { theme } from "$lib/stores";
+    import { getHoursFromDate, getHoursFromTime } from "$lib/time";
     
     // export variables
     export let advice;
@@ -129,14 +130,6 @@
         time: ""
     };
 
-    function getHoursFromDate(time) {    
-        return time.substr(11, 2).replace(":", ""); // filter only hour from time and replace : for one digit times like 6:40
-    }
-
-    function getHoursFromTime(time) { 
-        return time.substr(0, 2).replace("0", ""); // filter only hour from time and replace : for one digit times like 6:40
-    }
-
     // get correct forecast for specific day
     const getForecast = (result, day) => {
         let now = getHoursFromDate(result.location.localtime);
@@ -146,6 +139,8 @@
             for (let i = Number(now) + 1; i < 24; i++) {
                 forecastArray.push(forecast[i]);
             }
+            // if it's after 23:00 but before the next day, display the forecast for 23:00
+            if (forecastArray.length === 0) return [forecast[23]];
             return forecastArray;
         } else {
             return forecast;
@@ -173,7 +168,6 @@
     }
 
     const changeTheme = () => {
-        console.log();
         if ($theme === "light") {
             theme.set("dark");
         } else {
