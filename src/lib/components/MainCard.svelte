@@ -7,6 +7,59 @@
     let current = data.current;
     let day = data.forecast.forecastday[0].day;
 
+    let values = {};
+
+    // values
+    $: {
+        if (unit === "Metric") {
+            values = {
+                temp: {
+                    value: current.temp_c,
+                    text: "°C"
+                },
+                wind: {
+                    value: current.wind_kph,
+                    text: "km/h"
+                },
+                minTemp: {
+                    value: day.mintemp_c,
+                    text: "°C"
+                },
+                avgTemp: {
+                    value: day.avgtemp_c,
+                    text: "°C"
+                },
+                maxTemp: {
+                    value: day.maxtemp_c,
+                    text: "°C"
+                },
+            }
+        } else {
+            values = {
+                temp: {
+                    value: current.temp_f,
+                    text: "F"
+                },
+                wind: {
+                    value: current.wind_mph,
+                    text: "mph"
+                },
+                minTemp: {
+                    value: day.mintemp_f,
+                    text: "F"
+                },
+                avgTemp: {
+                    value: day.avgtemp_f,
+                    text: "F"
+                },
+                maxTemp: {
+                    value: day.maxtemp_f,
+                    text: "F"
+                },
+            }
+        }
+    }
+
     import { getTimeFromDate } from "$lib/time";
 
     let displayLocation = `${location.name}, ${location.region}, ${location.country}`
@@ -19,83 +72,43 @@
 
 <div class="card gradient">
     <h2>Today {getTimeFromDate(location.localtime)}</h2>
-    {#if unit === "Metric"}
-        <div class="weather">
-            <h3>{Math.round(current.temp_c)}<em>°C</em></h3>
-            <img src="/condition/{symbol}.svg" alt={symbol}>
+    <div class="weather">
+        <h3>{Math.round(values.temp.value)}<em>{values.temp.text}</em></h3>
+        <img src="/condition/{symbol}.svg" alt={symbol}>
+    </div>
+    <p>Condition: {current.condition.text}</p>
+    <div class="infos">
+        <div class="wind">
+            <img src="/ui/wind.svg" alt="">
+            <p class="current">{Math.round(values.wind.value) + values.wind.text}</p>
+            <p class="description">Wind</p>
         </div>
-        <p>Condition: {current.condition.text}</p>
-        <div class="infos">
-            <div class="wind">
-                <img src="/ui/wind.svg" alt="">
-                <p class="current">{Math.round(current.wind_kph)}km/h</p>
-                <p class="description">Wind</p>
-            </div>
-            <div class="rain">
-                <img src="/ui/rainPossibility.svg" alt="">
-                <p class="current">{Math.round(day.daily_chance_of_rain)}%</p>
-                <p class="description">rain possible</p>
-            </div>
-            <div class="humidty">
-                <img src="/ui/humidity.svg" alt="">
-                <p class="current">{current.humidity}%</p>
-                <p class="description">Humidity</p>
-            </div>
-            <div class="min">
-                <img src="/ui/min.svg" alt="">
-                <p class="current">{Math.round(day.mintemp_c)}°C</p>
-                <p class="description">min temp</p>
-            </div>
-            <div class="avg">
-                <img src="/ui/avg.png" alt="">
-                <p class="current">{Math.round(day.avgtemp_c)}°C</p>
-                <p class="description">avg temp</p>
-            </div>
-            <div class="max">
-                <img src="/ui/max.svg" alt="">
-                <p class="current">{Math.round(day.maxtemp_c)}°C</p>
-                <p class="description">max temp</p>
-            </div>
+        <div class="rain">
+            <img src="/ui/rainPossibility.svg" alt="">
+            <p class="current">{Math.round(day.daily_chance_of_rain)}%</p>
+            <p class="description">rain possible</p>
         </div>
-    {:else}
-        <div class="weather">
-            <h3>{Math.round(current.temp_f)}<em>F</em></h3>
-            <img src="/condition/{symbol}.svg" alt={symbol}>
+        <div class="humidty">
+            <img src="/ui/humidity.svg" alt="">
+            <p class="current">{current.humidity}%</p>
+            <p class="description">Humidity</p>
         </div>
-        <p>Condition: {current.condition.text}</p>
-        <div class="infos">
-            <div class="wind">
-                <img src="/ui/wind.svg" alt="">
-                <p class="current">{Math.round(current.wind_mph)}mph</p>
-                <p class="description">Wind</p>
-            </div>
-            <div class="rain">
-                <img src="/ui/rainPossibility.svg" alt="">
-                <p class="current">{Math.round(day.daily_chance_of_rain)}%</p>
-                <p class="description">rain possible</p>
-            </div>
-            <div class="humidty">
-                <img src="/ui/humidity.svg" alt="">
-                <p class="current">{current.humidity}%</p>
-                <p class="description">Humidty</p>
-            </div>
-            <div class="min">
-                <img src="/ui/min.svg" alt="">
-                <p class="current">{Math.round(day.mintemp_f)}F</p>
-                <p class="description">min temp</p>
-            </div>
-            <div class="avg">
-                <img src="/ui/avg.png" alt="">
-                <p class="current">{Math.round(day.avgtemp_f)}F</p>
-                <p class="description">avg temp</p>
-            </div>
-            <div class="max">
-                <img src="/ui/max.svg" alt="">
-                <p class="current">{Math.round(day.maxtemp_f)}F</p>
-                <p class="description">max temp</p>
-            </div>
+        <div class="min">
+            <img src="/ui/min.svg" alt="">
+            <p class="current">{Math.round(values.minTemp.value) + values.minTemp.text}</p>
+            <p class="description">min temp</p>
         </div>
-    {/if}
+        <div class="avg">
+            <img src="/ui/avg.png" alt="">
+            <p class="current">{Math.round(values.avgTemp.value) + values.avgTemp.text}</p>
+            <p class="description">avg temp</p>
+        </div>
+        <div class="max">
+            <img src="/ui/max.svg" alt="">
+            <p class="current">{Math.round(values.maxTemp.value) + values.maxTemp.text}</p>
+            <p class="description">max temp</p>
+        </div>
+    </div>
 </div>
 <p class="location">{displayLocation}</p>
 <button type="button" on:click>Add location to favourites</button>
