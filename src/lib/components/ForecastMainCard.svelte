@@ -23,7 +23,7 @@
                 <p class="description">Wind</p>
             </div>
             <div class="feels">
-                <img src="/ui/feelslike.svg" alt="">
+                <img src="/ui/max.svg" alt="">
                 <p class="data">{Math.round(data.feelslike_c)}°C</p>
                 <p class="description">Feels like</p>
             </div>
@@ -113,8 +113,8 @@
 
     .infos {
         margin-top: .5rem;
-        display: flex;
-        justify-content: space-around;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
     }
 
     .infos img {

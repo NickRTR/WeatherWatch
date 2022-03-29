@@ -94,6 +94,7 @@
             const result = await res.json();
             loc = result.location.name;
             astro = result.forecast.forecastday[0].astro;
+            console.log(result);
             localStorage.setItem("location", `${result.location.name} ${result.location.region}`);
   		    return result;
 		} else {
@@ -226,7 +227,7 @@
         <p class="backgroundFont">Lade Wetter ...</p>
     {:then data} 
         <div class="cards" style="margin: 1rem;">
-            <MainCard data={data.current} symbol={getSymbol(data.current.condition.code, new Date().getHours())} {unit} location={data.location} on:click={() => {addFav(data.location.name, data.location.region)}}></MainCard>
+            <MainCard data={data} symbol={getSymbol(data.current.condition.code, new Date().getHours())} {unit} location={data.location} on:click={() => {addFav(data.location.name, data.location.region)}}></MainCard>
 
             <div class="forecastnav">
                 <p class="backgroundFont" class:selected="{forecastType === 0}" on:click={() => {forecastType = 0}}>Today</p>
