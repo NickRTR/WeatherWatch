@@ -86,7 +86,7 @@
         <div class="rain">
             <img src="/ui/rainPossibility.svg" alt="">
             <p class="current">{Math.round(day.daily_chance_of_rain)}%</p>
-            <p class="description">rain possible</p>
+            <p class="description">Rain</p>
         </div>
         <div class="humidty">
             <img src="/ui/humidity.svg" alt="">
