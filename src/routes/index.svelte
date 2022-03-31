@@ -241,7 +241,6 @@
 
             {#if showForeCastMainCard}
                 <div class="forecastMainCard" transition:slide>
-                    // @ts-ignore
                     <ForecastMainCard time={forecastDetails.time} data={forecastDetails.data} symbol={
                         // @ts-ignore
                         getSymbol(forecastDetails.data.condition.code, getHoursFromDate(forecastDetails.time))
