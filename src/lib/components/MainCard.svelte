@@ -71,7 +71,7 @@
 </script>
 
 <div class="card gradient">
-    <h2>Today {getTimeFromDate(location.localtime)}</h2>
+    <h2>{location.name}, {getTimeFromDate(location.localtime)}</h2>
     <div class="weather">
         <h3>{Math.round(values.temp.value)}<em>{values.temp.text}</em></h3>
         <img src="/condition/{symbol}.svg" alt={symbol}>
