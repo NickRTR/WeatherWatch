@@ -38,12 +38,13 @@
     import { slide } from "svelte/transition";
     import { theme } from "$lib/stores";
     import { getHoursFromDate, getHoursFromTime } from "$lib/time";
+    import { onMount } from 'svelte';
     
     // export variables
     export let advice;
 
-    // variables
-    let loc = browser ? localStorage.getItem("location") : "New York"; // get/save location name from/to localStorage
+    // variables   
+    let location = "Fetching Location...";
     let forecastType = 0;
     let astro;
 
@@ -70,10 +71,10 @@
     let suggestions = [];
     async function getSuggestions() {
         // If Input is empty or just spaces, don't show suggestions
-        if (loc.match(/^ *$/) !== null) {
+        if (location.match(/^ *$/) !== null) {
             return;
         }
-        const res = await fetch(`/api/suggestion/${loc}.json`);
+        const res = await fetch(`/api/suggestion/${location}.json`);
         if (res.ok) {
             const result = await res.json();
   		    suggestions = result;
@@ -83,18 +84,29 @@
 		}
     }
 
+    onMount(() => {
+        location = localStorage.getItem("location") || "New York";
+        promise = getWeather();
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                location = `${position.coords.latitude},${position.coords.longitude}`;
+                promise = getWeather();
+            });
+        } else {
+            alert("Geolocation not available!");
+        }
+    })
+    
     // fetch weather data
-    let promise = getWeather();
+    let promise = new Promise(() => {});
     async function getWeather() {
         suggestions = []; 
         showFav = false;
-        loc = (loc === null) ? "New York" : loc;
-        let res = await fetch(`/api/${loc}.json`);
+        let res = await fetch(`/api/${location}.json`);
         if (res.ok) {
             const result = await res.json();
-            loc = result.location.name;
+            location = result.location.name;
             astro = result.forecast.forecastday[0].astro;
-            console.log(result);
             localStorage.setItem("location", `${result.location.name} ${result.location.region}`);
   		    return result;
 		} else {
@@ -198,14 +210,14 @@
     </div>
 
     <form>
-        <input type="text" placeholder="Enter Location" bind:value={loc} on:input={getSuggestions} use:selectTextOnFocus>
+        <input type="text" placeholder="Enter Location" bind:value={location} on:input={getSuggestions} use:selectTextOnFocus>
         <button type="submit" on:click|preventDefault={() => {promise = getWeather()}}>Load</button>
         <img class="favButton" src="/ui/star.svg" alt="star" title="favourites" on:click={() => {showFav = !showFav}}>
     </form>
 
     <div class="suggestions">
         {#each suggestions as suggestion}
-            <p class="backgroundFont" on:click={() => {loc = suggestion.name; promise = getWeather()}}>{suggestion.name}</p>
+            <p class="backgroundFont" on:click={() => {location = suggestion.name; promise = getWeather()}}>{suggestion.name}</p>
         {/each}
     </div>
 
@@ -213,7 +225,7 @@
         <div class="fav gradient" transition:slide>
             {#each favourites as favourite, id}
                 <div class="favItem" style="display: flex; justify-content: center; margin-bottom: .25rem">
-                    <p style="text-decoration: underline; cursor: pointer;" on:click={() => {loc = favourite; promise = getWeather()}}>{favourite}</p>
+                    <p style="text-decoration: underline; cursor: pointer;" on:click={() => {location = favourite; promise = getWeather()}}>{favourite}</p>
                     <button type="button" on:click={() => {deleteFav(id)}}>X</button>
                 </div>
             {:else}
