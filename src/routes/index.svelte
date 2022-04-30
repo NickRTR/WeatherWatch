@@ -15,6 +15,11 @@
 		return {
             props: {
                 advice: data.slip.advice
+            },
+            body: {
+                city: decodeURIComponent(
+                    /** @type {string} */ (event.request.headers.get('x-vercel-ip-city'))
+                )
             }
         }
 	}
