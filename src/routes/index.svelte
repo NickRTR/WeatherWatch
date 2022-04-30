@@ -15,11 +15,6 @@
 		return {
             props: {
                 advice: data.slip.advice
-            },
-            body: {
-                city: decodeURIComponent(
-                    /** @type {string} */ (event.request.headers.get('x-vercel-ip-city'))
-                )
             }
         }
 	}
@@ -46,9 +41,6 @@
     
     // export variables
     export let advice;
-    export let city;
-
-    $: console.log(city);
 
     // variables
     let loc = browser ? localStorage.getItem("location") : "New York"; // get/save location name from/to localStorage
