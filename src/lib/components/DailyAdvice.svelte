@@ -1,16 +1,3 @@
-<script context="module">
-	export async function load() {
-		const res = await fetch("https://api.adviceslip.com/advice");
-		const data = await res.json();
-
-		return {
-            props: {
-                advice: data.slip.advice
-            }
-        }
-	}
-</script>
-
 <script>
     export let advice;
 </script>

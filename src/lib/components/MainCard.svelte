@@ -1,4 +1,6 @@
 <script>
+    import { getTimeFromDate } from "$lib/helper";
+
     export let data;
     export let symbol;
     export let unit;
@@ -59,8 +61,6 @@
             }
         }
     }
-
-    import { getTimeFromDate } from "$lib/time";
 
     let displayLocation = `${location.name}, ${location.region}, ${location.country}`
     if (!location.region) {

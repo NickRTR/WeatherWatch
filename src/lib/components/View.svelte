@@ -2,8 +2,6 @@
     export let unit;
     export let data;
 
-    let displayUnit = "°C"
-
     $: if (unit === "Metric") {
         displayUnit = "°C";
     } else {

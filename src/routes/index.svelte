@@ -1,5 +1,5 @@
 <script context="module">
-	export async function load() {
+    export async function load() {
         let res;
         try {
 		    res = await fetch("https://api.adviceslip.com/advice"); 
@@ -32,40 +32,20 @@
     // import View from '$lib/components/View.svelte';
 
     // tools
-    import { conditions } from "$lib/conditions.js";
-    import { browser } from "$app/env";
-    import { selectTextOnFocus } from "$lib/selectText.js";
     import { slide } from "svelte/transition";
-    import { theme } from "$lib/stores";
-    import { getHoursFromDate, getHoursFromTime } from "$lib/time";
     import { onMount } from 'svelte';
-    
-    // export variables
+    import { selectTextOnFocus } from "$lib/selectText.js";
+    import { theme, unit, favourites } from "$lib/stores";
+    import { getHoursFromDate, getSymbol, addFav, deleteFav, changeTheme } from "$lib/helper";
+
     export let advice;
 
     // variables   
     let location = "Fetching Location...";
-    let forecastType = 0;
+    let forecastDay = 0;
     let astro;
 
-    // get/set preffered unit from/to localStorage
-    let unit = browser ? localStorage.getItem("unit") : "Metric";
-    $: if (browser) {
-        if (unit === null) {
-            unit = "Metric";
-        }
-        localStorage.setItem("unit", unit);
-    }
-
     let showFav = false;
-    // get favourites from localStorage
-    let favourites = browser ? JSON.parse(localStorage.getItem("fav")) : [];
-    $: if (browser) {
-        if (favourites === null) {
-            favourites = [];
-        }
-        localStorage.setItem("fav", JSON.stringify(favourites)); // if now favourites stored, store empty Array
-    }
 
     // on Input: fetch suggestions from API
     let suggestions = [];
@@ -97,10 +77,8 @@
         }
     })
     
-    // fetch weather data
     let promise = new Promise(() => {});
     async function getWeather() {
-        suggestions = []; 
         showFav = false;
         let res = await fetch(`/api/${location}.json`);
         if (res.ok) {
@@ -114,29 +92,8 @@
 		}
     }
 
-    // go through all possible conditions and get the fitting according to the weather code
-    const getSymbol = (code, hours) => {
-        for (const condition in conditions) {
-            if (conditions[condition].includes(code)) {
-                if (hours < parseInt(getHoursFromTime(astro.sunrise)) || hours > parseInt(getHoursFromTime(astro.sunset)) + 12) { // return available night icons if it's night
-                    switch (condition) {
-                        case "sun":
-                            return "night sun"
-                        case "partly cloudy":
-                            return "night partly cloudy"
-                        case "cloudy":
-                            return "night cloudy"
-                        default:
-                            return condition;
-                    }
-                }
-                return condition;
-            }
-        }
-    }
-
     // forecast
-    let showForeCastMainCard = false;
+    let showForecastMainCard = false;
 
     let forecastDetails = {
         data: "",
@@ -159,35 +116,6 @@
             return forecast;
         }
     }
-
-    // add favourite to favourite list and save to localStorage
-    const addFav = (name, region) => {
-        let location = region ? `${name}, ${region}` : name; // only display region if there
-        for (let i in favourites) {
-            if (favourites[i] === location) {
-                alert("You already saved this location!");
-                return; 
-            }
-        }
-        favourites = [...favourites, location];
-        localStorage.setItem("fav", JSON.stringify(favourites));
-        showFav = true; 
-    }
-
-    const deleteFav = (id) => {
-        favourites.splice(id, 1);
-        favourites = favourites;
-        localStorage.setItem("fav", JSON.stringify(favourites));
-    }
-
-    const changeTheme = () => {
-        if ($theme === "light") {
-            theme.set("dark");
-        } else {
-            theme.set("light");
-        }
-        localStorage.setItem("theme", $theme);
-    }
 </script>
 
 <body>
@@ -206,24 +134,24 @@
     </header>
 
     <div class="unit backgroundFont" style="margin-bottom: .6rem;">
-        <Switch bind:value={unit} label="" design="multi" options={['Metric', 'Imperial']} fontSize={18}/>
+        <Switch bind:value={$unit} label="" design="multi" options={['Metric', 'Imperial']} fontSize={18}/>
     </div>
 
     <form>
         <input type="text" placeholder="Enter Location" bind:value={location} on:input={getSuggestions} use:selectTextOnFocus>
         <button type="submit" on:click|preventDefault={() => {promise = getWeather()}}>Load</button>
-        <img class="favButton" src="/ui/star.svg" alt="star" title="favourites" on:click={() => {showFav = !showFav}}>
+        <img class="favButton" src="/ui/star.svg" alt="star" title="$favourites" on:click={() => {showFav = !showFav}}>
     </form>
 
     <div class="suggestions">
         {#each suggestions as suggestion}
-            <p class="backgroundFont" on:click={() => {location = suggestion.name; promise = getWeather()}}>{suggestion.name}</p>
+            <p class="backgroundFont" on:click={() => {suggestions = []; location = suggestion.name; promise = getWeather()}}>{suggestion.name}</p>
         {/each}
     </div>
 
     {#if showFav}
         <div class="fav gradient" transition:slide>
-            {#each favourites as favourite, id}
+            {#each $favourites as favourite, id}
                 <div class="favItem" style="display: flex; justify-content: center; margin-bottom: .25rem">
                     <p style="text-decoration: underline; cursor: pointer;" on:click={() => {location = favourite; promise = getWeather()}}>{favourite}</p>
                     <button type="button" on:click={() => {deleteFav(id)}}>X</button>
@@ -238,31 +166,31 @@
         <p class="backgroundFont">Lade Wetter ...</p>
     {:then data} 
         <div class="cards" style="margin: 1rem;">
-            <MainCard data={data} symbol={getSymbol(data.current.condition.code, new Date().getHours())} {unit} location={data.location} on:click={() => {addFav(data.location.name, data.location.region)}}></MainCard>
+            <MainCard data={data} symbol={getSymbol(data.current.condition.code, new Date().getHours(), astro)} unit={$unit} location={data.location} on:click={() => {addFav(data.location.name, data.location.region); showFav = true;}}></MainCard>
 
             <div class="forecastnav">
-                <p class="backgroundFont" class:selected="{forecastType === 0}" on:click={() => {forecastType = 0}}>Today</p>
-                <p class="backgroundFont" class:selected="{forecastType === 1}" on:click={() => {forecastType = 1}}>Tomorrow</p>
-                <p class="backgroundFont" class:selected="{forecastType === 2}" on:click={() => {forecastType = 2}}>Overmorrow</p>
+                <p class="backgroundFont" class:selected="{forecastDay === 0}" on:click={() => {forecastDay = 0}}>Today</p>
+                <p class="backgroundFont" class:selected="{forecastDay === 1}" on:click={() => {forecastDay = 1}}>Tomorrow</p>
+                <p class="backgroundFont" class:selected="{forecastDay === 2}" on:click={() => {forecastDay = 2}}>Overmorrow</p>
             </div>
             <div class="forecast">
-                {#each getForecast(data, forecastType) as forecastData}
-                    <Card {forecastData} {unit} symbol={getSymbol(forecastData.condition.code, getHoursFromDate(forecastData.time))} on:click={() => {forecastDetails.data = forecastData; forecastDetails.time = forecastData.time; showForeCastMainCard = true}}></Card>
+                {#each getForecast(data, forecastDay) as forecastData}
+                    <Card {forecastData} unit={$unit} symbol={getSymbol(forecastData.condition.code, getHoursFromDate(forecastData.time), astro)} on:click={() => {forecastDetails.data = forecastData; forecastDetails.time = forecastData.time; showForecastMainCard = true}}></Card>
                 {/each}
             </div>
 
-            {#if showForeCastMainCard}
+            {#if showForecastMainCard}
                 <div class="forecastMainCard" transition:slide>
                     <ForecastMainCard time={forecastDetails.time} data={forecastDetails.data} symbol={
                         // @ts-ignore
-                        getSymbol(forecastDetails.data.condition.code, getHoursFromDate(forecastDetails.time))
-                    } {unit} on:click={() => {showForeCastMainCard = false}} />
+                        getSymbol(forecastDetails.data.condition.code, getHoursFromDate(forecastDetails.time), astro)
+                    } unit={$unit} on:click={() => {showForecastMainCard = false}} />
                 </div>
             {/if}
 
             <Astro {astro}></Astro>
             <Air uv={data.current.uv} quality={data.current.air_quality["us-epa-index"]}></Air>
-            <!-- <View {unit} data={data.current}></View> -->
+            <!-- <View unit={$unit} data={data.current}></View> -->
             <DailyAdvice {advice}></DailyAdvice>
         </div>
     {:catch error}
