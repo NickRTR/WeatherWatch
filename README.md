@@ -6,6 +6,7 @@ Weather Watch is a weather report built in Sveltekit. It shows the current weath
 
 ## Functionality
 
+- detect geolocation
 - Switch between Metric and Imperial units
 - Light and dark mode stored in localstorage (change with click on title)
 - Save your favourite locations
