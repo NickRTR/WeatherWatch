@@ -28,10 +28,9 @@ export function getSymbol (code, hours, astro) {
 import { favourites } from "$lib/stores";
 import { get } from "svelte/store";
 
-let favs = get(favourites);
-
 // add favourite to favourite list and save to localStorage
 export function addFav (name, region) {
+    let favs = get(favourites);
     let location = region ? `${name}, ${region}` : name; // only display region if there
     for (let i in favs) {
         if (favs[i] === location) {
@@ -40,10 +39,12 @@ export function addFav (name, region) {
         }
     }
     let updatedFavourites = [...favs, location];
+    console.log(updatedFavourites);
     favourites.set(updatedFavourites);
 }
 
 export function deleteFav (id) {
+    let favs = get(favourites);
     favourites.set(favs.splice(id, 1));
 }
 

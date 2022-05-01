@@ -14,7 +14,7 @@
 
 <style>
     body {
-        color: white;
+        color: white !important;
     }
 
     a {
