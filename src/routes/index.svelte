@@ -35,8 +35,8 @@
     import { slide } from "svelte/transition";
     import { onMount } from 'svelte';
     import { selectTextOnFocus } from "$lib/selectText.js";
-    import { theme, unit, favourites } from "$lib/stores";
-    import { getHoursFromDate, getSymbol, addFav, deleteFav, changeTheme } from "$lib/helper";
+    import { theme, unit, favourites, fetchLocation } from "$lib/stores";
+    import { getHoursFromDate, getSymbol, addFav, deleteFav, changeTheme, changeUnit, changeFetchLocation } from "$lib/helper";
 
     export let advice;
 
@@ -65,19 +65,29 @@
     }
 
     onMount(() => {
+        // default to New York at load
         location = localStorage.getItem("location") || "New York";
-        promise = getWeather();
+        weatherData = getWeather();
+        if ($fetchLocation === "on") getLocation();
+    });
+
+    function getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 location = `${position.coords.latitude},${position.coords.longitude}`;
-                promise = getWeather();
+                weatherData = getWeather();
             });
         } else {
             alert("Geolocation not available!");
         }
-    })
+    }
     
-    let promise = new Promise(() => {});
+    $: {
+        // If "fetchLocation" switches to "on", fetch location and get weather
+        if ($fetchLocation === "on") getLocation();
+    }
+
+    let weatherData = new Promise(() => {});
     async function getWeather() {
         showFav = false;
         let res = await fetch(`/api/${location}.json`);
@@ -121,81 +131,103 @@
 <body>
     <header>
         <h1 on:click={changeTheme}>Weatherwatch</h1>
-        <div class="toggleAppeareance">
-            <input type="checkbox" name="toggleAppeareance" id="toggleAppeareance" on:change={changeTheme} checked={$theme === "light" ? true : false}>
-            <label for="toggleAppeareance">
-                {#if $theme === "light"}
-                    <p class="light">🌞</p>
-                {:else if $theme === "dark"}
-                    <p class="dark">🌙</p>
-                {/if}
-            </label>
-        </div>
+        <aside class="buttons">
+            <div class="unit button" title="switch units">
+                <input type="checkbox" name="unit" id="unit" on:change={changeUnit}>
+                <label for="unit">
+                    {#if $unit === "Metric"}
+                        <p>°C</p>
+                    {:else if $unit === "Imperial"}
+                        <p>°F</p>
+                    {/if}
+                </label>
+            </div>
+            <div class="toggleFetchLocation button" title="turn on/off location fetching">
+                <input type="checkbox" name="toggleFetchLocation" id="toggleFetchLocation" on:change={changeFetchLocation}>
+                <label for="toggleFetchLocation">
+                    {#if $fetchLocation === "on"}
+                        <p>📍</p>
+                    {:else if $fetchLocation === "off"}
+                        <p>❌</p>
+                    {/if}
+                </label>
+            </div>
+            <div class="toggleAppeareance button" title="light/dark mode">
+                <input type="checkbox" name="toggleAppeareance" id="toggleAppeareance" on:change={changeTheme}>
+                <label for="toggleAppeareance">
+                    {#if $theme === "light"}
+                        <p>🌞</p>
+                    {:else if $theme === "dark"}
+                        <p>🌙</p>
+                    {/if}
+                </label>
+            </div>
+        </aside>
     </header>
 
-    <div class="unit backgroundFont" style="margin-bottom: .6rem;">
-        <Switch bind:value={$unit} label="" design="multi" options={['Metric', 'Imperial']} fontSize={18}/>
-    </div>
-
-    <form>
-        <input type="text" placeholder="Enter Location" bind:value={location} on:input={getSuggestions} use:selectTextOnFocus>
-        <button type="submit" on:click|preventDefault={() => {promise = getWeather()}}>Load</button>
-        <img class="favButton" src="/ui/star.svg" alt="star" title="$favourites" on:click={() => {showFav = !showFav}}>
-    </form>
-
-    <div class="suggestions">
-        {#each suggestions as suggestion}
-            <p class="backgroundFont" on:click={() => {suggestions = []; location = suggestion.name; promise = getWeather()}}>{suggestion.name}</p>
-        {/each}
-    </div>
-
-    {#if showFav}
-        <div class="fav gradient" transition:slide>
-            {#each $favourites as favourite, id}
-                <div class="favItem" style="display: flex; justify-content: center; margin-bottom: .25rem">
-                    <p style="text-decoration: underline; cursor: pointer;" on:click={() => {location = favourite; promise = getWeather()}}>{favourite}</p>
-                    <button type="button" on:click={() => {deleteFav(id)}}>X</button>
-                </div>
-            {:else}
-                <p>No favourites, add one with the "+" in your Main card.</p>
+    <div class="input">
+        <form>
+            <input type="text" placeholder="Enter Location" bind:value={location} on:input={getSuggestions} use:selectTextOnFocus>
+            <button type="submit" on:click|preventDefault={() => {weatherData = getWeather()}}>Load</button>
+            <img class="favButton" src="/ui/star.svg" alt="star" title="$favourites" on:click={() => {showFav = !showFav}}>
+        </form>
+    
+        <div class="suggestions">
+            {#each suggestions as suggestion}
+                <p class="backgroundFont" on:click={() => {suggestions = []; location = suggestion.name; weatherData = getWeather()}}>{suggestion.name}</p>
             {/each}
         </div>
-    {/if}
-
-    {#await promise}
-        <p class="backgroundFont">Lade Wetter ...</p>
-    {:then data} 
-        <div class="cards" style="margin: 1rem;">
-            <MainCard data={data} symbol={getSymbol(data.current.condition.code, new Date().getHours(), astro)} unit={$unit} location={data.location} on:click={() => {addFav(data.location.name, data.location.region); showFav = true;}}></MainCard>
-
-            <div class="forecastnav">
-                <p class="backgroundFont" class:selected="{forecastDay === 0}" on:click={() => {forecastDay = 0}}>Today</p>
-                <p class="backgroundFont" class:selected="{forecastDay === 1}" on:click={() => {forecastDay = 1}}>Tomorrow</p>
-                <p class="backgroundFont" class:selected="{forecastDay === 2}" on:click={() => {forecastDay = 2}}>Overmorrow</p>
-            </div>
-            <div class="forecast">
-                {#each getForecast(data, forecastDay) as forecastData}
-                    <Card {forecastData} unit={$unit} symbol={getSymbol(forecastData.condition.code, getHoursFromDate(forecastData.time), astro)} on:click={() => {forecastDetails.data = forecastData; forecastDetails.time = forecastData.time; showForecastMainCard = true}}></Card>
+    
+        {#if showFav}
+            <div class="fav gradient" transition:slide>
+                {#each $favourites as favourite, id}
+                    <div class="favItem" style="display: flex; justify-content: center; margin-bottom: .25rem">
+                        <p style="text-decoration: underline; cursor: pointer;" on:click={() => {location = favourite; weatherData = getWeather()}}>{favourite}</p>
+                        <button type="button" on:click={() => {deleteFav(id)}}>X</button>
+                    </div>
+                {:else}
+                    <p>No favourites, add one with the "+" in your Main card.</p>
                 {/each}
             </div>
+        {/if}
+    </div>
 
-            {#if showForecastMainCard}
-                <div class="forecastMainCard" transition:slide>
-                    <ForecastMainCard time={forecastDetails.time} data={forecastDetails.data} symbol={
-                        // @ts-ignore
-                        getSymbol(forecastDetails.data.condition.code, getHoursFromDate(forecastDetails.time), astro)
-                    } unit={$unit} on:click={() => {showForecastMainCard = false}} />
+    <main>
+        {#await weatherData}
+            <p class="backgroundFont">Lade Wetter ...</p>
+        {:then data} 
+            <div class="cards" style="margin: 1rem;">
+                <MainCard data={data} symbol={getSymbol(data.current.condition.code, new Date().getHours(), astro)} unit={$unit} location={data.location} on:click={() => {addFav(data.location.name, data.location.region); showFav = true;}}></MainCard>
+
+                <div class="forecastnav">
+                    <p class="backgroundFont" class:selected="{forecastDay === 0}" on:click={() => {forecastDay = 0}}>Today</p>
+                    <p class="backgroundFont" class:selected="{forecastDay === 1}" on:click={() => {forecastDay = 1}}>Tomorrow</p>
+                    <p class="backgroundFont" class:selected="{forecastDay === 2}" on:click={() => {forecastDay = 2}}>Overmorrow</p>
                 </div>
-            {/if}
+                <div class="forecast">
+                    {#each getForecast(data, forecastDay) as forecastData}
+                        <Card {forecastData} unit={$unit} symbol={getSymbol(forecastData.condition.code, getHoursFromDate(forecastData.time), astro)} on:click={() => {forecastDetails.data = forecastData; forecastDetails.time = forecastData.time; showForecastMainCard = true}}></Card>
+                    {/each}
+                </div>
 
-            <Astro {astro}></Astro>
-            <Air uv={data.current.uv} quality={data.current.air_quality["us-epa-index"]}></Air>
-            <!-- <View unit={$unit} data={data.current}></View> -->
-            <DailyAdvice {advice}></DailyAdvice>
-        </div>
-    {:catch error}
-        <p class="error" style="color: red; margin-top: .5rem">Error: Could not load weather data. Please refresh!</p>
-    {/await}
+                {#if showForecastMainCard}
+                    <div class="forecastMainCard" transition:slide>
+                        <ForecastMainCard time={forecastDetails.time} data={forecastDetails.data} symbol={
+                            // @ts-ignore
+                            getSymbol(forecastDetails.data.condition.code, getHoursFromDate(forecastDetails.time), astro)
+                        } unit={$unit} on:click={() => {showForecastMainCard = false}} />
+                    </div>
+                {/if}
+
+                <Astro {astro}></Astro>
+                <Air uv={data.current.uv} quality={data.current.air_quality["us-epa-index"]}></Air>
+                <!-- <View unit={$unit} data={data.current}></View> -->
+                <DailyAdvice {advice}></DailyAdvice>
+            </div>
+        {:catch error}
+            <p class="error" style="color: red; margin-top: .5rem">Error: Could not load weather data. Please refresh!</p>
+        {/await}
+    </main>
 </body>
 
 <style>
@@ -206,32 +238,46 @@
         align-items: center;
     }
 
+    header aside {
+        display: flex;
+    }
+
+    header aside div {
+        margin-inline: .5rem;
+    }
+
     h1 {
         margin: .8rem 0;
         color: var(--accent);
         cursor: pointer;
     }
 
-    .toggleAppeareance input {
+    .button input {
         display: none;
     }
 
-    .toggleAppeareance p {
+    .button p {
         background-color: var(--color);
         border-radius: 100%;
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         padding: .5rem;
         box-shadow: 0 0 5px 4px var(--accent);
         user-select: none;
         cursor: pointer;
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
+    }
+
+    .unit p {
+        font-weight: bold;
+        line-height: 2.3rem;
     }
 
     form {
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-top: 1rem;
     }
 
     input {

@@ -61,7 +61,34 @@ export function changeTheme() {
     } else {
         theme.set("light");
     }
-    localStorage.setItem("theme", get(theme));
+}
+
+// ----------------------------
+// Unit -----------------------
+// ----------------------------
+
+import { unit } from "$lib/stores";
+
+export function changeUnit() {
+    if (get(unit) === "Imperial") {
+        unit.set("Metric");
+    } else {
+        unit.set("Imperial");
+    }
+}
+
+// ----------------------------
+// Fetch Location -------------
+// ----------------------------
+
+import { fetchLocation } from "$lib/stores";
+
+export function changeFetchLocation() {
+    if (get(fetchLocation) === "off") {
+        fetchLocation.set("on");
+    } else {
+        fetchLocation.set("off");
+    }
 }
 
 // ----------------------------
