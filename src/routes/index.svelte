@@ -233,7 +233,7 @@
     header {
         display: flex;
         justify-content: space-between;
-        margin: 0 1rem;
+        margin: 1rem;
         align-items: center;
     }
 
@@ -368,5 +368,23 @@
     ::-webkit-scrollbar-thumb {
         background: var(--accent);
         border-radius: 10px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        header {
+            flex-direction: column;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .button p {
+            font-size: 1.4rem;
+            width: 30px;
+            height: 30px;
+        }
+
+        .unit p {
+            line-height: 2rem;
+        }
     }
 </style>
