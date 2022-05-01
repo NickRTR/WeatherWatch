@@ -41,12 +41,10 @@ export function addFav (name, region) {
     }
     let updatedFavourites = [...favs, location];
     favourites.set(updatedFavourites);
-    localStorage.setItem("fav", JSON.stringify(updatedFavourites));
 }
 
 export function deleteFav (id) {
     favourites.set(favs.splice(id, 1));
-    localStorage.setItem("fav", JSON.stringify(favs));
 }
 
 // ----------------------------

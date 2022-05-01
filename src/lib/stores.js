@@ -1,6 +1,6 @@
 import { writable } from 'svelte-local-storage-store'
 
-export const theme = writable("light");
+export const theme = writable("theme", "light");
 
 export const unit = writable("unit", "Imperial");
 

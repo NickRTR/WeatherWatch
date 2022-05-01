@@ -22,7 +22,6 @@
 
 <script>
     // components
-    import Switch from '$lib/components/Switch.svelte';
     import MainCard from "$lib/components/MainCard.svelte";
     import ForecastMainCard from "$lib/components/ForecastMainCard.svelte";
     import Card from "$lib/components/Card.svelte";

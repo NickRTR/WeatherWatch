@@ -1,14 +1,5 @@
 <script>
-    import { browser } from "$app/env";
     import { theme } from "$lib/stores";
-
-    theme.set(browser ? localStorage.getItem("theme") : "light");
-    $: if (browser) {
-        if ($theme === null ) {
-            theme.set("light");
-        }
-        localStorage.setItem("theme", $theme);
-    }
 </script>
 
 <body class={$theme}>
