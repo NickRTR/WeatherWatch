@@ -259,7 +259,7 @@
     .button p {
         background-color: var(--color);
         border-radius: 100%;
-        font-size: 1.555rem;
+        font-size: 1.52rem;
         padding: .5rem;
         box-shadow: 0 0 5px 4px var(--accent);
         user-select: none;
@@ -379,7 +379,7 @@
         }
 
         .button p {
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             width: 30px;
             height: 30px;
         }
