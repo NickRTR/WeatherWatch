@@ -40,7 +40,7 @@
     export let advice;
 
     // variables   
-    let location = "Fetching Location...";
+    let location = "fetching location...";
     let forecastDay = 0;
     let astro;
 
@@ -71,6 +71,7 @@
     });
 
     function getLocation() {
+        location = "fetching location..."
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 location = `${position.coords.latitude},${position.coords.longitude}`;
@@ -258,7 +259,7 @@
     .button p {
         background-color: var(--color);
         border-radius: 100%;
-        font-size: 1.6rem;
+        font-size: 1.555rem;
         padding: .5rem;
         box-shadow: 0 0 5px 4px var(--accent);
         user-select: none;
@@ -378,7 +379,7 @@
         }
 
         .button p {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             width: 30px;
             height: 30px;
         }
