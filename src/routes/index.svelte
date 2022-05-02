@@ -168,8 +168,8 @@
     <div class="input">
         <form>
             <input type="text" placeholder="Enter Location" bind:value={location} on:input={getSuggestions} use:selectTextOnFocus>
-            <button type="submit" on:click|preventDefault={() => {weatherData = getWeather()}}>Load</button>
-            <img class="favButton" src="/ui/star.svg" alt="star" title="$favourites" on:click={() => {showFav = !showFav}}>
+            <button type="submit" on:click|preventDefault={() => {suggestions = []; weatherData = getWeather()}}>Load</button>
+            <img class="favButton" src="/ui/star.svg" alt="star" title="favourites" on:click={() => {showFav = !showFav}}>
         </form>
     
         <div class="suggestions">
