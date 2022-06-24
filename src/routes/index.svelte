@@ -148,7 +148,7 @@
                     {#if $fetchLocation === "on"}
                         <p>📍</p>
                     {:else if $fetchLocation === "off"}
-                        <p>❌</p>
+                        <p class="grayed">📍</p>
                     {/if}
                 </label>
             </div>
@@ -266,6 +266,10 @@
         cursor: pointer;
         width: 35px;
         height: 35px;
+    }
+
+    .grayed {
+        filter: grayscale(1);
     }
 
     .unit p {
