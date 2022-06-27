@@ -33,7 +33,7 @@
     // tools
     import { slide } from "svelte/transition";
     import { onMount } from 'svelte';
-    import { selectTextOnFocus } from "$lib/selectText.js";
+    import autoselect from "svelte-autoselect";
     import { theme, unit, favourites, fetchLocation } from "$lib/stores";
     import { getHoursFromDate, getSymbol, addFav, deleteFav, changeTheme, changeUnit, changeFetchLocation } from "$lib/helper";
 
@@ -167,7 +167,7 @@
 
     <div class="input">
         <form>
-            <input type="text" placeholder="Enter Location" bind:value={location} on:input={getSuggestions} use:selectTextOnFocus>
+            <input type="text" placeholder="Enter Location" bind:value={location} on:input={getSuggestions} use:autoselect>
             <button type="submit" on:click|preventDefault={() => {suggestions = []; weatherData = getWeather()}}>Load</button>
             <img class="favButton" src="/ui/star.svg" alt="star" title="favourites" on:click={() => {showFav = !showFav}}>
         </form>
