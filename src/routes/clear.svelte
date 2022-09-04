@@ -1,23 +1,23 @@
 <script>
-    import { onMount } from "svelte";
+	import { onMount } from "svelte";
 
-    onMount(() => {
-        localStorage.clear();
-    })
+	onMount(() => {
+		localStorage.clear();
+	});
 </script>
 
 <body>
-    <h2>This page clears WeatherWatch's localStorage to fix issues.</h2>
-    <p>You don't need to do anything, by accessing this page, your localStorage has already been cleared.</p>
-    <a href="/" sveltekit:prefetch title="Home">Back to WeatherWatch</a>
+	<h2>This page clears WeatherWatch's localStorage to fix issues.</h2>
+	<p>You don't need to do anything, by accessing this page, your localStorage has already been cleared.</p>
+	<a href="/" sveltekit:prefetch title="Home">Back to WeatherWatch</a>
 </body>
 
 <style>
-    body {
-        color: white !important;
-    }
+	body {
+		color: white !important;
+	}
 
-    a {
-        color: white;
-    }
+	a {
+		color: white;
+	}
 </style>
