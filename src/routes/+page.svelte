@@ -1,25 +1,3 @@
-<script context="module">
-	export async function load() {
-		let res;
-		try {
-			res = await fetch("https://api.adviceslip.com/advice");
-		} catch (error) {
-			return {
-				props: {
-					advice: "No internet connection!"
-				}
-			};
-		}
-		const data = await res.json();
-
-		return {
-			props: {
-				advice: data.slip.advice
-			}
-		};
-	}
-</script>
-
 <script>
 	// components
 	import MainCard from "$lib/components/MainCard.svelte";
@@ -37,7 +15,7 @@
 	import { theme, unit, favourites, fetchLocation } from "$lib/stores";
 	import { getHoursFromDate, getSymbol, addFav, deleteFav, changeTheme, changeUnit, changeFetchLocation } from "$lib/helper";
 
-	export let advice;
+	export let data;
 
 	// variables
 	let location = "fetching location...";
@@ -54,12 +32,13 @@
 			return;
 		}
 		const res = await fetch(`/api/suggestion/${location}.json`);
-		if (res.ok) {
-			const result = await res.json();
-			suggestions = result;
-			suggestions.length = suggestions.length === 10 ? 5 : 0;
+		const data = await res.json();
+
+		if (data.error) {
+			throw new Error(data.error);
 		} else {
-			throw new Error(await res.json());
+			suggestions = data.data;
+			suggestions.length = suggestions.length === 10 ? 5 : 0;
 		}
 	}
 
@@ -90,15 +69,17 @@
 	let weatherData = new Promise(() => {});
 	async function getWeather() {
 		showFav = false;
-		let res = await fetch(`/api/${location}.json`);
-		if (res.ok) {
-			const result = await res.json();
-			location = result.location.name;
-			astro = result.forecast.forecastday[0].astro;
-			localStorage.setItem("location", `${result.location.name} ${result.location.region}`);
-			return result;
+		const res = await fetch(`/api/${location}.json`);
+		let data = await res.json();
+
+		if (data.error) {
+			throw new Error(data.error);
 		} else {
-			throw new Error(await res.json());
+			data = data.data;
+			location = data.location.name;
+			astro = data.forecast.forecastday[0].astro;
+			localStorage.setItem("location", `${data.location.name} ${data.location.region}`);
+			return data;
 		}
 	}
 
@@ -231,15 +212,15 @@
 	<main>
 		{#await weatherData}
 			<p class="backgroundFont">Lade Wetter ...</p>
-		{:then data}
+		{:then weatherData}
 			<div class="cards" style="margin: 1rem;">
 				<MainCard
-					{data}
-					symbol={getSymbol(data.current.condition.code, new Date().getHours(), astro)}
+					data={weatherData}
+					symbol={getSymbol(weatherData.current.condition.code, new Date().getHours(), astro)}
 					unit={$unit}
-					location={data.location}
+					location={weatherData.location}
 					on:click={() => {
-						addFav(data.location.name, data.location.region);
+						addFav(weatherData.location.name, weatherData.location.region);
 						showFav = true;
 					}}
 				/>
@@ -274,7 +255,7 @@
 					</p>
 				</div>
 				<div class="forecast">
-					{#each getForecast(data, forecastDay) as forecastData}
+					{#each getForecast(weatherData, forecastDay) as forecastData}
 						<Card
 							{forecastData}
 							unit={$unit}
@@ -304,9 +285,9 @@
 				{/if}
 
 				<Astro {astro} />
-				<Air uv={data.current.uv} quality={data.current.air_quality["us-epa-index"]} />
+				<Air uv={weatherData.current.uv} quality={weatherData.current.air_quality["us-epa-index"]} />
 				<!-- <View unit={$unit} data={data.current}></View> -->
-				<DailyAdvice {advice} />
+				<DailyAdvice advice={data.advice} />
 			</div>
 		{:catch error}
 			<p class="error" style="color: red; margin-top: .5rem">Error: Could not load weather data. Please refresh!</p>
