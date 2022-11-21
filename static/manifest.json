@@ -33,7 +33,7 @@
 			"purpose": "maskable"
 		}
 	],
-	"description": "Weather Watch is a weather report built in Sveltekit.",
+	"description": "Weather Watch is a weather report app built in Sveltekit.",
 	"lang": "en",
 	"dir": "auto",
 	"prefer_related_applications": false
