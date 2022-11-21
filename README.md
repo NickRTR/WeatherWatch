@@ -41,5 +41,5 @@ Icons from https://www.reshot.com/
 
 ---
 
-https://twitter.com/nickrtrrtr \
+https://twitter.com/nick_reutlinger \
 https://kit.svelte.dev
