@@ -2,7 +2,7 @@
 
 https://weatherwatch.vercel.app/
 
-Weather Watch is a weather report built in Sveltekit. It shows the current weather and a weather forecast for 3 days. Additionally it offers a small advice for every day at the bottom of the app. The App is available in every Browser at https://weatherwatch.vercel.app/. The data is delivered by https://www.weatherapi.com/ and https://api.adviceslip.com/.
+Weather Watch is a weather report app built in Sveltekit. It shows the current weather and a weather forecast for 3 days. Additionally it offers a small advice for every day at the bottom of the app. The App is available in every Browser at https://weatherwatch.vercel.app/. The data is delivered by https://www.weatherapi.com/ and https://api.adviceslip.com/.
 
 ## Functionality
 
