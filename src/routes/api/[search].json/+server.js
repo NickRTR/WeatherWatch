@@ -1,7 +1,6 @@
 import { API_KEY } from "$lib/api";
 
 export async function GET({ params }) {
-	console.log(API_KEY);
 	const result = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${params.search}&days=3&aqi=yes`);
 	let data = await result.json();
 
