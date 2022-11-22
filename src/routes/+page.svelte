@@ -184,7 +184,7 @@
 
 		{#if showFav}
 			<div class="fav gradient" transition:slide>
-				{#each $favourites as favourite, id}
+				{#each $favourites as favourite}
 					<div class="favItem" style="display: flex; justify-content: center; margin-bottom: .25rem">
 						<p
 							style="text-decoration: underline; cursor: pointer;"
@@ -198,7 +198,7 @@
 						<button
 							type="button"
 							on:click={() => {
-								deleteFav(id);
+								deleteFav(favourite);
 							}}>X</button
 						>
 					</div>

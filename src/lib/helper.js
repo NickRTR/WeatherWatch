@@ -40,13 +40,12 @@ export function addFav(name, region) {
 		}
 	}
 	let updatedFavourites = [...favs, location];
-	console.log(updatedFavourites);
 	favourites.set(updatedFavourites);
 }
 
-export function deleteFav(id) {
+export function deleteFav(favourite) {
 	let favs = get(favourites);
-	favourites.set(favs.splice(id, 1));
+	favourites.set(favs.filter((title) => title !== favourite));
 }
 
 // ----------------------------
