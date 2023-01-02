@@ -7,7 +7,7 @@
 </body>
 
 <footer>
-	<p>©2022 Nick Reutlinger</p>
+	<p>©2023 Nick Reutlinger</p>
 </footer>
 
 <style>
